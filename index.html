@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sahaay Care</title>
+<meta name="theme-color" content="#0B2E1F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+<style>
+/* Layout: one phone-sized app (390×844) shown in a device bezel on a dark stage; on a real phone it fills the screen. */
+:root{
+  --stage:#101814; --stage-fg:#9fb5a8;
+  --cream:#F5F4EF; --forest:#0B2E1F; --mint:#E3F3EA; --glow:#4FE8A0; --peach:#FBE8D8;
+  --orange:#E8842C;--cta:#B85C15;--orange-text:#9A4A0E; --red:#D9534F; --ink:#1C2B23;
+  --serif:var(--sans);
+  --sans:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--stage);color:var(--stage-fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select,textarea{font:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+.stage{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-block:24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.caption{font-size:13px;letter-spacing:.04em;text-align:center;max-width:390px;line-height:1.5}
+.caption b{color:#dfe9e3;font-weight:800}
+.device{width:414px;height:min(868px,calc(100vh - 90px));min-height:640px;border-radius:56px;background:#0a0a0a;padding:12px;box-shadow:0 0 0 2px #2a2f2c,0 40px 80px -20px rgba(0,0,0,.7);position:relative;flex:none}
+.notch{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:118px;height:32px;background:#000;border-radius:20px;z-index:60}
+.notch::after{content:"";position:absolute;right:16px;top:10px;width:12px;height:12px;border-radius:50%;background:#16202b}
+
+/* ---------- App tokens (light) ---------- */
+.app{--bg:var(--cream);--surface:#fff;--text:var(--ink);--muted:#4F5F56;--label:#2E4A3B;--warn:#9A4A0E;--line:#E7E4DA;--soft:#EEECE4;--head:var(--forest);--chip:#fff;
+  width:100%;height:100%;border-radius:44px;overflow:hidden;background:var(--bg);color:var(--text);position:relative;display:flex;flex-direction:column;transition:background .4s,color .4s}
+.app.night{--bg:#0B2E1F;--surface:#113B2A;--text:#F1F7F3;--muted:#B3CCBE;--label:#BFE6D0;--warn:#F6BC86;--line:#24543F;--soft:#123F2C;--head:#0E3524;--chip:#12402D}
+.statusbar{height:50px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font-size:12px;font-weight:800;background:var(--head);color:#dbe8e0;font-variant-numeric:tabular-nums}
+.statusbar .r{display:flex;gap:6px;align-items:center}
+.batt{width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative;padding:1px}
+.batt i{display:block;height:100%;width:78%;background:currentColor;border-radius:1px}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(127,140,130,.4) transparent;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{width:4px}.scroll::-webkit-scrollbar-thumb{background:rgba(127,140,130,.4);border-radius:4px}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:var(--text);opacity:.35;z-index:70;pointer-events:none}
+
+/* header */
+.hdr{background:var(--head);color:#F3F7F4;padding:10px 20px 22px;border-radius:0 0 28px 28px;position:relative}
+.hdr-top{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;flex:none}
+.brand{flex:1;min-width:0;line-height:1}
+.brand b{font-weight:800;font-size:20px;display:block}
+.brand small{font-size:11px;font-weight:700;letter-spacing:.06em;color:#BFE6D0}
+.ibtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center;transition:background .2s,transform .15s}
+.ibtn:active{transform:scale(.92)}
+.ibtn.hot{background:var(--orange)}
+.quote{font-size:19px;font-weight:700;line-height:1.35;margin:16px 0 8px;text-wrap:balance}
+.mission{font-size:12px;font-weight:700;letter-spacing:.04em;color:#BFE6D0;display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--glow);box-shadow:0 0 0 0 rgba(79,232,160,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(79,232,160,0)}100%{box-shadow:0 0 0 0 rgba(79,232,160,0)}}
+.rolechip{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,.1);border-radius:999px;padding:6px 12px 6px 9px;font-size:13px;font-weight:700;color:#EAF4EE}
+
+/* role menu */
+.menu{position:absolute;left:12px;right:12px;top:58px;background:#0E3524;border:1px solid #1d5a40;border-radius:22px;padding:14px 10px 10px;z-index:40;box-shadow:0 24px 50px -10px rgba(0,0,0,.55);animation:drop .22s ease-out}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}}
+.menu-h{display:flex;justify-content:space-between;padding:0 8px 10px;font-size:12px;font-weight:800;letter-spacing:.04em;color:#BFE6D0}
+.menu-h i{font-style:normal;font-weight:600;color:#A9C4B5}
+.ropt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px;border-radius:14px;color:#F3F7F4;transition:background .15s}
+.ropt:hover{background:rgba(255,255,255,.05)}
+.ropt.on{background:var(--orange)}
+.ropt .ic{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center;flex:none}
+.ropt.on .ic{background:rgba(255,255,255,.22)}
+.ropt b{font-size:15px;font-weight:800;display:block}
+.ropt small{font-size:12.5px;opacity:.85;display:block;line-height:1.3}
+.reset{display:flex;align-items:center;gap:6px;margin:8px auto 0;font-size:12.5px;font-weight:700;color:#A9C4B5;padding:6px 10px}
+.scrim{position:absolute;inset:0;background:rgba(5,15,10,.45);z-index:30;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+
+/* body sections */
+.body{padding:20px 18px 40px;display:flex;flex-direction:column;gap:22px}
+.sec{display:flex;flex-direction:column;gap:10px}
+.eyebrow{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px;font-weight:800;color:var(--text);line-height:1.3}
+.sheet-h .eyebrow{font-size:13px;font-weight:700;color:var(--muted)}
+.eyebrow .live{color:var(--warn);display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px}
+.mintcard{background:var(--mint);color:var(--ink);border-radius:22px;padding:6px 16px}
+.peachcard{background:var(--peach);color:var(--ink)}
+.statrow{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(11,46,31,.09)}
+.statrow:last-child{border-bottom:0}
+.statrow span{font-size:14px;font-weight:700;color:#2E4A3B}
+.statrow b{font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--cta);color:#fff;font-size:14.5px;font-weight:800;padding:13px 18px;min-height:46px;border-radius:999px;transition:transform .12s,filter .2s}
+.btn:hover{filter:brightness(1.05)}.btn:active{transform:scale(.97)}
+.btn.sm{padding:8px 14px;font-size:13px;min-height:38px}
+.btn.block{width:100%}
+.btn.ghost{background:transparent;color:var(--text);border:1.5px solid var(--line)}
+.btn.green{background:var(--forest);color:#fff}
+.night .btn.green{background:var(--glow);color:var(--forest)}
+.btn.redo{background:transparent;color:var(--red);border:1.5px solid rgba(217,83,79,.35)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.arrows{display:flex;gap:4px}
+.arrows button{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--text)}
+.arrows button:hover{background:var(--soft)}
+
+/* needs carousel */
+.carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -18px;padding:2px 18px 4px;scroll-padding:0 18px}
+.carousel::-webkit-scrollbar{display:none}
+.need{flex:0 0 100%;scroll-snap-align:start;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:10px;color:var(--ink);background:var(--mint)}
+.need.peach{background:var(--peach)}
+.need-top{display:flex;justify-content:space-between;align-items:center}
+.cat{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:#3D5246}
+.need h3{font-weight:800;font-size:20px;margin:0;line-height:1.3}
+.need p{margin:0;font-size:14px;line-height:1.55;color:#3D4D44}
+.nums{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#2E3F35;font-variant-numeric:tabular-nums}
+.bar{height:7px;border-radius:7px;background:rgba(11,46,31,.1);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--orange);border-radius:7px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.bar.g i{background:#2f9e6a}
+.night .bar.dk{background:rgba(255,255,255,.1)}
+.night .bar.dk i{background:var(--glow)}
+.pct{text-align:right;font-size:13px;font-weight:800;color:#9A4A0E;margin-top:-4px}
+.dots{display:flex;justify-content:center;gap:5px}
+.dots i{width:6px;height:6px;border-radius:6px;background:var(--line);transition:all .25s}
+.dots i.on{width:18px;background:var(--cta)}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:800;letter-spacing:.01em;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.b-critical{background:var(--cta);color:#fff}
+.b-crit2{background:#FDE3D6;color:#C25E15;border:1px solid #F6C6A6}
+.b-high{background:#FFF1E2;color:#9A4A0E;border:1px solid #F7D7B5}
+.b-normal{background:#E7F2EC;color:#2F6B4F;border:1px solid #CFE6D9}
+.b-pending{background:#FFF4D6;color:#8A6411;border:1px solid #F1DFA6}
+.b-approved{background:#E3F3EA;color:#20734B;border:1px solid #BFE3CE}
+.b-ready{background:var(--forest);color:var(--glow)}
+.b-declined{background:#FBE3E2;color:#B03A36;border:1px solid #F1C3C1}
+.b-open{background:#FBE3E2;color:#B03A36}
+.b-progress{background:#FFF1E2;color:#9A4A0E}
+.b-resolved{background:#E3F3EA;color:#20734B}
+.night .b-approved{background:rgba(79,232,160,.12);color:var(--glow);border-color:rgba(79,232,160,.3)}
+.night .b-ready{background:var(--glow);color:var(--forest)}
+.night .b-pending{background:rgba(232,132,44,.16);color:#F6BC86;border-color:rgba(232,132,44,.35)}
+.night .b-resolved{background:rgba(79,232,160,.12);color:var(--glow)}
+.night .b-open{background:rgba(232,132,44,.2);color:#F6BC86}
+
+/* list rows */
+.row{display:flex;gap:12px;align-items:flex-start}
+.row .grow{flex:1;min-width:0}
+.t{font-weight:800;font-size:15px;line-height:1.35}
+.s{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45}
+.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--mint);color:var(--forest)}
+.ico.p{background:var(--peach);color:#9A4A0E}
+.night .ico{background:rgba(79,232,160,.12);color:var(--glow)}
+.night .ico.p{background:rgba(232,132,44,.16);color:#F4B57A}
+.list{display:flex;flex-direction:column;gap:10px}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;flex-wrap:wrap;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* tabs */
+.tabs{display:flex;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+.tabs button{flex:1;padding:10px 2px;border-radius:10px;font-size:12.5px;font-weight:800;color:var(--muted);position:relative;transition:all .2s}
+.tabs button.on{background:var(--forest);color:var(--glow)}
+.tabs .n{position:absolute;top:-6px;right:2px;min-width:19px;height:19px;border-radius:10px;background:var(--cta);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 4px}
+.seg{display:flex;gap:4px;margin-top:10px}
+.seg button{flex:1;font-size:12px;font-weight:800;padding:8px 2px;border-radius:9px;border:1px solid var(--line);color:var(--muted)}
+.seg button.on.o{background:#FBE3E2;color:#B03A36;border-color:#F1C3C1}
+.seg button.on.ip{background:#FFF1E2;color:#9A4A0E;border-color:#F7D7B5}
+.seg button.on.r{background:#E3F3EA;color:#20734B;border-color:#BFE3CE}
+.prio{width:4px;align-self:stretch;border-radius:4px;flex:none}
+
+/* wizard */
+.steps{display:flex;gap:6px}
+.steps i{flex:1;height:4px;border-radius:4px;background:var(--line)}
+.steps i.on{background:var(--cta)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13.5px;font-weight:700;color:var(--text)}
+.inp{width:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--muted);background:var(--surface);color:var(--text);font-size:15px}
+.inp:focus{outline:none;border-color:var(--orange)}
+textarea.inp{resize:none;min-height:72px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:13.5px;min-height:40px;font-weight:700;display:inline-flex;gap:6px;align-items:center;transition:all .15s;background:var(--chip)}
+.chip.on{background:var(--forest);border-color:var(--forest);color:var(--glow)}
+.night .chip.on{background:var(--glow);border-color:var(--glow);color:var(--forest)}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tiers button{padding:12px 0;border-radius:14px;border:1.5px solid var(--line);font-weight:900;font-size:15px;font-variant-numeric:tabular-nums}
+.tiers button.on{border-color:var(--cta);background:#FFF1E2;color:#9A4A0E}
+
+/* modal sheet */
+.modal{position:absolute;inset:0;z-index:80;display:flex;align-items:flex-end;background:rgba(5,15,10,.5);animation:fade .2s}
+.sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--bg);border-radius:28px 28px 0 0;padding:10px 20px 34px;display:flex;flex-direction:column;gap:16px;animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40%);opacity:.4}}
+.grip{width:40px;height:4px;border-radius:4px;background:var(--line);margin:0 auto}
+.sheet-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sheet-h h2{font-weight:800;font-size:21px;margin:4px 0 0;line-height:1.3}
+.impact{background:var(--mint);color:var(--ink);border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+
+/* night monitor */
+.wing{display:flex;flex-direction:column;gap:9px}
+.stepper{display:flex;align-items:center;gap:8px;font-weight:900;font-variant-numeric:tabular-nums;font-size:13px}
+.stepper button{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line)}
+.stepper button.plus{background:var(--cta);border-color:var(--cta);color:#fff}
+.check{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;min-height:48px}
+.check:last-child{border-bottom:0}
+.check .box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--muted);display:grid;place-items:center;flex:none;margin-left:auto;transition:all .15s}
+.check.done span{text-decoration:line-through;color:var(--muted)}
+.check.done .box{background:var(--glow);border-color:var(--glow);color:var(--forest)}
+.contacts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.contact{border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:4px;text-decoration:none;border:1.5px solid}
+.contact.pol{border-color:rgba(217,83,79,.45);color:#F08F8B;background:rgba(217,83,79,.08)}
+.contact.med{border-color:rgba(232,132,44,.5);color:#F4B57A;background:rgba(232,132,44,.1)}
+.app:not(.night) .contact.pol{color:var(--red)}
+.app:not(.night) .contact.med{color:#9A4A0E}
+.contact b{font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.contact span{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+
+.banner{background:var(--forest);color:#EAF4EE;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.night .banner{background:#134731}
+.banner h3{font-weight:800;font-size:19px;margin:0;line-height:1.3}
+.banner p{margin:0;font-size:14px;color:#CFE3D7;line-height:1.5}
+.banner .glyph{position:absolute;right:-12px;bottom:-16px;opacity:.12;color:var(--glow)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.kpi small{font-size:13px;font-weight:700;opacity:.85}
+.kpi b{font-weight:800;font-size:24px;font-variant-numeric:tabular-nums}
+.empty{text-align:center;padding:18px;color:var(--muted);font-size:14px;border:1.5px dashed var(--line);border-radius:18px}
+.note{font-size:13px;line-height:1.5;color:var(--muted)}
+.hscroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:0 18px}
+.hscroll::-webkit-scrollbar{display:none}
+.prog{flex:0 0 72%;border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:8px;color:var(--ink)}
+
+.toast{position:absolute;left:16px;right:16px;bottom:30px;z-index:90;background:var(--forest);color:#EAF4EE;border:1px solid #1d5a40;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;display:flex;gap:10px;align-items:center;animation:up .25s ease-out;box-shadow:0 12px 30px -8px rgba(0,0,0,.4)}
+.toast svg{color:var(--glow);flex:none}
+
+@media (max-width:520px){
+  .stage{padding:0;gap:0;justify-content:stretch;height:100%}
+  .caption,.notch{display:none}
+  .device{width:100%;height:100%;min-height:0;border-radius:0;padding:0;box-shadow:none;background:transparent;flex:1}
+  .app{border-radius:0}
+  .statusbar{display:none}
+  .homebar{display:none}
+  .hdr{padding-top:14px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>html,body{margin:0}</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const {useState,useEffect,useRef,useMemo} = React;
+const html = htm.bind(React.createElement);
+
+/* ---------------- Icons (lucide-style strokes) ---------------- */
+const P = {
+  heart:["M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"],
+  shield:["M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"],
+  sun:["c:12,12,4","M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"],
+  moon:["M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"],
+  eye:["M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z","c:12,12,3"],
+  home:["M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"],
+  check:["M20 6 9 17l-5-5"],
+  plus:["M5 12h14M12 5v14"], minus:["M5 12h14"],
+  gift:["r:3,8,18,4","M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"],
+  send:["m22 2-7 20-4-9-9-4Z","M22 2 11 13"],
+  clock:["c:12,12,10","M12 6v6l4 2"],
+  book:["M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"],
+  droplet:["M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7z"],
+  sparkles:["M12 3l1.9 5.8L20 10.7l-6.1 1.9L12 18.5l-1.9-5.9L4 10.7l6.1-1.9z","M19 3v4M17 5h4"],
+  menu:["M4 6h16M4 12h16M4 18h16"], x:["M18 6 6 18M6 6l12 12"],
+  chevL:["m15 18-6-6 6-6"], chevR:["m9 18 6-6-6-6"],
+  wrench:["M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"],
+  user:["c:12,8,4","M4 21a8 8 0 0 1 16 0"],
+  users:["c:9,8,4","M2 21a7 7 0 0 1 14 0","M16 3.13a4 4 0 0 1 0 7.75M22 21a7 7 0 0 0-4-6.3"],
+  phone:["M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"],
+  alert:["M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z","M12 9v4M12 17h.01"],
+  bed:["M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"],
+  arrow:["M7 17 17 7M7 7h10v10"],
+  rotate:["M3 12a9 9 0 1 0 3-6.7L3 8","M3 3v5h5"],
+  cal:["r:3,4,18,18","M16 2v4M8 2v4M3 10h18"],
+  box:["M21 8 12 3 3 8v8l9 5 9-5z","M3 8l9 5 9-5M12 13v8"],
+  star:["M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"],
+  pin:["M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z","c:12,10,3"],
+  baby:["c:12,7,4","M9 7h.01M15 7h.01M10 9a2 2 0 0 0 4 0","M7 21v-4a5 5 0 0 1 10 0v4"],
+  med:["r:3,6,18,15","M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M12 10v6M9 13h6"],
+  flame:["M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"],
+  lock:["r:4,11,16,10","M8 11V7a4 4 0 0 1 8 0v4"],
+};
+function Icon({n,s=16,w=2,style}){
+  const parts=(P[n]||[]).map((d,i)=>{
+    if(d.startsWith('c:')){const [cx,cy,r]=d.slice(2).split(',');return html`<circle key=${i} cx=${cx} cy=${cy} r=${r}/>`}
+    if(d.startsWith('r:')){const [x,y,ww,h]=d.slice(2).split(',');return html`<rect key=${i} x=${x} y=${y} width=${ww} height=${h} rx="2"/>`}
+    return html`<path key=${i} d=${d}/>`;
+  });
+  return html`<svg width=${s} height=${s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth=${w} strokeLinecap="round" strokeLinejoin="round" style=${style} aria-hidden="true">${parts}</svg>`;
+}
+
+/* ---------------- Seed data ---------------- */
+const CAT = {nutrition:{ic:'droplet',label:'Nutrition'},hygiene:{ic:'sparkles',label:'Hygiene'},education:{ic:'book',label:'Education'},medical:{ic:'med',label:'Medical'},shelter:{ic:'home',label:'Shelter'}};
+const SEED = () => ({
+  needs:[
+    {id:'n1',title:'Infant Nutrition Packs',category:'nutrition',urgency:'critical',unit:'usd',unitCost:1,raised:1800,target:2500,location:'Wing B Shelter',desc:'Urgent supply of baby formula, cereal, and nutrient-dense purées for 45 families residing in the temporary shelter wings.'},
+    {id:'n2',title:'Sanitary & Hygiene Kits',category:'hygiene',urgency:'high',unit:'kits',unitCost:10,raised:80,target:200,location:'Community Center',desc:'Soap, toothbrushes, sanitary pads and towels so every family room has a clean start each week.'},
+    {id:'n3',title:'Primary School Notebooks',category:'education',urgency:'normal',unit:'books',unitCost:3,raised:170,target:200,location:'Learning Center Room 3',desc:'Ruled notebooks and pencils so children in treatment can keep up with school lessons at the learning desk.'},
+    {id:'n4',title:'First Aid Refills',category:'medical',urgency:'critical',unit:'usd',unitCost:1,raised:150,target:1000,location:'Health Cabin A',desc:'Dressings, antiseptic, thermometers and ORS sachets to restock the on-site health cabin.'},
+  ],
+  volunteers:[
+    {id:'v1',name:'Rhea Kulkarni',email:'rhea.k@mail.com',interests:['Tutoring','Special Events'],availability:['Saturdays'],status:'pending'},
+    {id:'v2',name:'Imran Sheikh',email:'imran.s@mail.com',interests:['Maintenance'],availability:['Weekday Evenings','Sundays'],status:'pending'},
+  ],
+  workshops:[
+    {id:'w1',title:'Interactive English Storytelling',category:'Education',when:'2026-07-05T11:00',by:'Aarav Sharma',status:'approved'},
+    {id:'w2',title:'Basic Dental Care for Kids',category:'Health',when:'2026-07-08T16:00',by:'Dr. Meera Iyer',status:'approved'},
+    {id:'w3',title:'Clay Modelling & Fine Motor Play',category:'Arts',when:'2026-07-12T15:00',by:'Sana Qureshi',status:'pending'},
+  ],
+  maintenance:[
+    {id:'m1',title:'Water filter cartridge replacement',area:'Kitchen block',priority:'High',status:'Open',source:'Staff'},
+    {id:'m2',title:'Ceiling fan repair',area:'Wing C, Room 4',priority:'Medium',status:'In Progress',source:'Staff'},
+    {id:'m3',title:'Loose step tread on stairwell',area:'Main staircase',priority:'Low',status:'Resolved',source:'Staff'},
+  ],
+  familyRequests:[
+    {id:'f1',type:'School Supplies',recipient:'Rohan Sharma',date:'2026-06-27',status:'Approved'},
+    {id:'f2',type:'Grocery Aid',recipient:'Family Support',date:'2026-06-28',status:'Ready',room:'Room 2'},
+  ],
+  children:['Aarav Sharma','Rohan Sharma'],
+  handover:[
+    {id:'h1',child:'Aarav Sharma',risk:'High',note:'Fever history. Needs close observation tonight.'},
+  ],
+  alerts:[],
+  nightLogs:[
+    {id:'l1',time:'6:00 PM',text:'Evening handover done. Night Care is on.',who:'Staff'},
+  ],
+  donations:[
+    {id:'d1',name:'Kavya M.',amount:30,need:'Sanitary & Hygiene Kits',ago:'2 days ago'},
+  ],
+  stats:{hours:1420,families:318},
+  myVolunteerProfile:null,
+  myWorkshops:[],
+  isLowLight:null,
+  role:'contributor',
+});
+const KEY='sahaay-care-v2';
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.needs)return {...SEED(),...s}}catch(e){}return SEED()}
+function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+const uid=()=>Math.random().toString(36).slice(2,8);
+const pctOf=n=>Math.min(100,Math.round(n.raised/n.target*100));
+const fmtAmt=(n,v)=>n.unit==='usd'?'$'+Math.round(v).toLocaleString('en-US'):Math.round(v).toLocaleString('en-US')+' '+n.unit;
+const fmtWhen=w=>{try{const d=new Date(w);return d.toLocaleDateString('en-CA')+' at '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}catch(e){return w}};
+const nowTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+const today=()=>new Date().toLocaleDateString('en-CA');
+const isNightHour=()=>{const h=new Date().getHours();return h>=20||h<6};
+
+const ROLES=[
+  {id:'parent',label:'Parent',ic:'home',sub:'Request grocery aid or school supplies for kids'},
+  {id:'contributor',label:'Contributor',ic:'heart',sub:'Donate and sponsor active relief programs'},
+  {id:'volunteer',label:'Volunteer',ic:'user',sub:'Onboard shifts and propose education classes'},
+  {id:'staff',label:'Staff',ic:'shield',sub:'Post direct needs or approve volunteer requests'},
+  {id:'night',label:'Night Care',ic:'moon',sub:'For parents after staff hours, 6 PM – 10 AM'},
+];
+
+/* ---------------- Shared bits ---------------- */
+const urgBadge=u=>u==='critical'?html`<span className="badge b-critical">Critical urgency</span>`:u==='high'?html`<span className="badge b-high">High</span>`:html`<span className="badge b-normal">Normal</span>`;
+const urgSmall=u=>u==='critical'?html`<span className="badge b-crit2">Critical</span>`:u==='high'?html`<span className="badge b-high">High</span>`:html`<span className="badge b-normal">Normal</span>`;
+
+function Sheet({title,eyebrow,onClose,children}){
+  return html`<div className="modal" onClick=${e=>{if(e.target===e.currentTarget)onClose()}}>
+    <div className="sheet" role="dialog" aria-modal="true" aria-label=${title}>
+      <div className="grip"></div>
+      <div className="sheet-h"><div><div className="eyebrow">${eyebrow}</div><h2>${title}</h2></div>
+        <button className="ibtn" style=${{background:'var(--soft)'}} onClick=${onClose} aria-label="Close"><${Icon} n="x"/></button></div>
+      ${children}
+    </div></div>`;
+}
+function Field({label,children}){return html`<div className="field"><label>${label}</label>${children}</div>`}
+
+/* ---------------- Contributor ---------------- */
+function Contributor({st,openDonate}){
+  const ref=useRef(null);const [idx,setIdx]=useState(0);
+  const needs=st.needs;
+  const fulfilled=Math.round(needs.reduce((a,n)=>a+pctOf(n),0)/needs.length);
+  const go=d=>{const el=ref.current;if(!el)return;const i=Math.max(0,Math.min(needs.length-1,idx+d));el.scrollTo({left:i*(el.clientWidth-36+12),behavior:'smooth'})};
+  const onScroll=()=>{const el=ref.current;if(el)setIdx(Math.round(el.scrollLeft/(el.clientWidth-36+12)))};
+  return html`<div className="body">
+    <div className="sec">
+      <div className="eyebrow">Our achievements <span className="live"><${Icon} n="heart" s=${12}/> Live impact</span></div>
+      <div className="mintcard">
+        <div className="statrow"><span>Hours volunteered</span><b>${st.stats.hours.toLocaleString('en-US')}h</b></div>
+        <div className="statrow"><span>Families helped</span><b>${st.stats.families}</b></div>
+        <div className="statrow"><span>Needs fulfilled</span><b>${Math.max(fulfilled,0)}%</b></div>
+      </div>
+    </div>
+    <div className="sec">
+      <div className="eyebrow">Urgent needs carousel <div className="arrows"><button onClick=${()=>go(-1)} aria-label="Previous need"><${Icon} n="chevL"/></button><button onClick=${()=>go(1)} aria-label="Next need"><${Icon} n="chevR"/></button></div></div>
+      <div className="carousel" ref=${ref} onScroll=${onScroll}>
+        ${needs.map((n,i)=>html`<article key=${n.id} className=${'need'+(i%2?' peach':'')}>
+          <div className="need-top">${urgBadge(n.urgency)}<span className="cat"><${Icon} n=${CAT[n.category]?.ic||'box'} s=${12}/>${CAT[n.category]?.label||n.category}</span></div>
+          <h3>${n.title}</h3><p>${n.desc}</p>
+          <div className="nums"><span>Raised: ${fmtAmt(n,n.raised)}</span><span>Target: ${fmtAmt(n,n.target)}</span></div>
+          <div className="bar"><i style=${{width:pctOf(n)+'%'}}></i></div>
+          <div className="pct">${pctOf(n)}% Fulfilled</div>
+          <button className="btn block" onClick=${()=>openDonate(n.id)} disabled=${pctOf(n)>=100}><${Icon} n="gift" s=${14}/>${pctOf(n)>=100?'Fully funded':'Support this need'}</button>
+        </article>`)}
+      </div>
+      <div className="dots">${needs.map((n,i)=>html`<i key=${n.id} className=${i===idx?'on':''}></i>`)}</div>
+    </div>
+    <div className="sec">
+      <div className="eyebrow">Continue where you left off</div>
+      <div className="card list">
+        <div className="row"><div className="ico"><${Icon} n="droplet"/></div><div className="grow"><div className="t">Monthly Nutrition Sponsor</div><div className="s">Month 3 of 6 · Wing B families</div><div className="bar g" style=${{marginTop:8}}><i style=${{width:'50%'}}></i></div></div></div>
+        <div className="row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">Learning Desk Book Drive</div><div className="s">42 of 60 books delivered</div><div className="bar" style=${{marginTop:8}}><i style=${{width:'70%'}}></i></div></div></div>
+      </div>
+    </div>
+    <div className="sec">
+      <div className="eyebrow">Recent gifts</div>
+      <div className="list">${st.donations.slice(0,4).map(d=>html`<div key=${d.id} className="card row" style=${{padding:'12px 14px'}}>
+        <div className="ico"><${Icon} n="heart" s=${15}/></div><div className="grow"><div className="t">${d.name} gave $${d.amount}</div><div className="s">${d.need}</div></div><div className="s">${d.ago}</div></div>`)}</div>
+    </div>
+  </div>`;
+}
+function DonateSheet({need,onClose,onDonate}){
+  const [tier,setTier]=useState(30);const [custom,setCustom]=useState('');const [name,setName]=useState('');
+  const amt=custom!==''?Math.max(0,Number(custom)||0):tier;
+  const units=need.unit==='usd'?amt:Math.floor(amt/need.unitCost);
+  const after=Math.min(need.target,need.raised+units);
+  return html`<${Sheet} title=${need.title} eyebrow="Support this need" onClose=${onClose}>
+    <div className="tiers">${[15,30,50,100].map(t=>html`<button key=${t} className=${custom===''&&tier===t?'on':''} onClick=${()=>{setTier(t);setCustom('')}}>$${t}</button>`)}</div>
+    <${Field} label="Custom amount ($)"><input id="d-custom" className="inp" inputMode="numeric" placeholder="Enter any amount" value=${custom} onChange=${e=>setCustom(e.target.value.replace(/[^0-9]/g,''))}/></${Field}>
+    <${Field} label="Donor name"><input id="d-name" className="inp" placeholder="Your name (or leave blank)" value=${name} onChange=${e=>setName(e.target.value)}/></${Field}>
+    <div className="impact"><${Icon} n="sparkles" s=${18}/><div>
+      <b>Your $${amt} ${need.unit==='usd'?'adds $'+amt:'provides '+units+' '+need.unit}</b> to ${need.title.toLowerCase()} at ${need.location}.<br/>
+      Progress moves from ${pctOf(need)}% to ${Math.round(after/need.target*100)}%.</div></div>
+    <button className="btn block" disabled=${units<=0} onClick=${()=>onDonate(need.id,amt,units,name.trim()||'Anonymous')}><${Icon} n="heart" s=${14}/>Give $${amt}</button>
+  </${Sheet}>`;
+}
+
+/* ---------------- Volunteer ---------------- */
+const INTERESTS=['Nutrition Support','Hygiene Kit Assembly','Tutoring','Maintenance','Shelter Assistance','Special Events'];
+const AVAIL=['Weekday Mornings','Weekday Evenings','Saturdays','Sundays'];
+function Volunteer({st,act,setRole,openWorkshop}){
+  const me=st.myVolunteerProfile;
+  const [step,setStep]=useState(1);const [f,setF]=useState({name:'',email:'',interests:[],availability:[]});
+  const tog=(k,v)=>setF(p=>({...p,[k]:p[k].includes(v)?p[k].filter(x=>x!==v):[...p[k],v]}));
+  if(!me||me.status==='declined'){
+    const ok1=f.name.trim().length>1&&/\S+@\S+\.\S+/.test(f.email);
+    return html`<div className="body">
+      ${me&&me.status==='declined'?html`<div className="card" style=${{borderColor:'rgba(217,83,79,.35)'}}><div className="t">Your last application was declined</div><div className="s">Staff could not verify it this time. You can update your details and apply again.</div></div>`:null}
+      <div className="banner"><div className="glyph"><${Icon} n="users" s=${110} w=${1.5}/></div><h3>Become a Sahaay volunteer</h3><p>Three quick steps. Staff verify every volunteer before their first shift with the children.</p></div>
+      <div className="steps">${[1,2,3].map(i=>html`<i key=${i} className=${i<=step?'on':''}></i>`)}</div>
+      ${step===1&&html`<div className="sec"><div className="eyebrow">Step 1 · Identification</div>
+        <${Field} label="Full name"><input id="v-name" className="inp" placeholder="e.g. Ananya Rao" value=${f.name} onChange=${e=>setF({...f,name:e.target.value})}/></${Field}>
+        <${Field} label="Email address"><input id="v-email" className="inp" type="email" placeholder="you@example.com" value=${f.email} onChange=${e=>setF({...f,email:e.target.value})}/></${Field}>
+        <button className="btn block" disabled=${!ok1} onClick=${()=>setStep(2)}>Continue <${Icon} n="chevR" s=${14}/></button></div>`}
+      ${step===2&&html`<div className="sec"><div className="eyebrow">Step 2 · Focus areas</div>
+        <div className="chips">${INTERESTS.map(i=>html`<button key=${i} className=${'chip'+(f.interests.includes(i)?' on':'')} onClick=${()=>tog('interests',i)}>${f.interests.includes(i)&&html`<${Icon} n="check" s=${12} w=${3}/>`}${i}</button>`)}</div>
+        <div style=${{display:'flex',gap:8,marginTop:6}}><button className="btn ghost" onClick=${()=>setStep(1)}>Back</button><button className="btn" style=${{flex:1}} disabled=${!f.interests.length} onClick=${()=>setStep(3)}>Continue <${Icon} n="chevR" s=${14}/></button></div></div>`}
+      ${step===3&&html`<div className="sec"><div className="eyebrow">Step 3 · Commitment</div>
+        <div className="chips">${AVAIL.map(i=>html`<button key=${i} className=${'chip'+(f.availability.includes(i)?' on':'')} onClick=${()=>tog('availability',i)}>${f.availability.includes(i)&&html`<${Icon} n="check" s=${12} w=${3}/>`}${i}</button>`)}</div>
+        <div style=${{display:'flex',gap:8,marginTop:6}}><button className="btn ghost" onClick=${()=>setStep(2)}>Back</button><button className="btn" style=${{flex:1}} disabled=${!f.availability.length} onClick=${()=>{act.applyVolunteer(f);setStep(1)}}><${Icon} n="send" s=${14}/>Submit application</button></div></div>`}
+    </div>`;
+  }
+  if(me.status==='pending') return html`<div className="body">
+    <div className="card" style=${{textAlign:'center',padding:'26px 18px',display:'flex',flexDirection:'column',gap:10,alignItems:'center'}}>
+      <div className="ico p" style=${{width:56,height:56,borderRadius:18}}><${Icon} n="clock" s=${26}/></div>
+      <span className="badge b-pending">Awaiting staff verification</span>
+      <div style=${{fontSize:22}}>Thank you, ${me.name.split(' ')[0]}</div>
+      <div className="note">Your profile is in the staff approval queue. To try the full flow, switch to the <b>Staff</b> role, approve your profile under Approvals, then come back here.</div>
+      <button className="btn green" onClick=${()=>setRole('staff')}><${Icon} n="shield" s=${14}/>Switch to Staff</button>
+    </div>
+    <div className="card"><div className="eyebrow" style=${{marginBottom:8}}>Your application</div>
+      <div className="s">${me.email}</div><div className="chips" style=${{marginTop:10}}>${[...me.interests,...me.availability].map(i=>html`<span key=${i} className="chip" style=${{padding:'6px 10px',fontSize:13}}>${i}</span>`)}</div></div>
+  </div>`;
+  const mine=st.workshops.filter(w=>w.mine);
+  return html`<div className="body">
+    <div className="banner"><div className="glyph"><${Icon} n="star" s=${110} w=${1.5}/></div>
+      <span className="badge b-ready" style=${{alignSelf:'flex-start'}}><${Icon} n="check" s=${10} w=${3}/>Verified volunteer</span>
+      <h3>Welcome back, ${me.name.split(' ')[0]}</h3><p>Specialising in ${me.interests.join(', ')} · ${me.availability.join(', ')}</p></div>
+    <div className="kpis">
+      <div className="kpi" style=${{background:'var(--mint)',color:'var(--ink)'}}><small>Hours served</small><b>${me.hours} hrs</b></div>
+      <div className="kpi" style=${{background:'var(--peach)',color:'var(--ink)'}}><small>Rank</small><b>Silver</b><div style=${{fontSize:12.5,fontWeight:700,opacity:.8}}>${(25-me.hours).toFixed(1)} hrs to Gold</div></div>
+    </div>
+    <div className="sec"><div className="eyebrow">Next shift</div>
+      <div className="card row"><div className="ico"><${Icon} n="cal"/></div><div className="grow"><div className="t">${me.interests[0]}</div><div className="s">${me.availability[0]} · Wing B Learning Desk</div></div><span className="badge b-approved">Confirmed</span></div></div>
+    <div className="sec"><div className="eyebrow">My workshop proposals <button className="btn sm" onClick=${openWorkshop}><${Icon} n="plus" s=${12} w=${3}/>Propose</button></div>
+      ${mine.length?html`<div className="list">${mine.map(w=>html`<div key=${w.id} className="card row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">${w.title}</div><div className="s">${w.category} · ${fmtWhen(w.when)}</div></div><span className=${'badge '+(w.status==='approved'?'b-approved':w.status==='rejected'?'b-declined':'b-pending')}>${w.status}</span></div>`)}</div>`
+      :html`<div className="empty">Share a skill with the children. Propose a class and staff will review it; approved classes show up for parents.</div>`}
+    </div>
+  </div>`;
+}
+function WorkshopSheet({onClose,onSubmit}){
+  const [f,setF]=useState({title:'',category:'Education',when:''});
+  return html`<${Sheet} title="Propose a workshop" eyebrow="Volunteer" onClose=${onClose}>
+    <${Field} label="Workshop title"><input id="w-title" className="inp" placeholder="e.g. Paper craft for 6–10 year olds" value=${f.title} onChange=${e=>setF({...f,title:e.target.value})}/></${Field}>
+    <${Field} label="Category"><div className="chips">${['Education','Arts','Health','Life Skills','Play'].map(c=>html`<button key=${c} className=${'chip'+(f.category===c?' on':'')} onClick=${()=>setF({...f,category:c})}>${c}</button>`)}</div></${Field}>
+    <${Field} label="Proposed date & time"><input id="w-when" className="inp" type="datetime-local" value=${f.when} onChange=${e=>setF({...f,when:e.target.value})}/></${Field}>
+    <button className="btn block" disabled=${!f.title.trim()||!f.when} onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${14}/>Send for staff review</button>
+  </${Sheet}>`;
+}
+
+/* ---------------- Staff ---------------- */
+function Staff({st,act,openModal}){
+  const [tab,setTab]=useState('approvals');
+  const pv=st.volunteers.filter(v=>v.status==='pending');
+  const pw=st.workshops.filter(w=>w.status==='pending');
+  const pf=st.familyRequests.filter(r=>r.status==='Pending'||r.status==='Approved');
+  const pending=pv.length+pw.length+st.familyRequests.filter(r=>r.status==='Pending').length;
+  const openM=st.maintenance.filter(m=>m.status!=='Resolved').length;
+  const openA=st.alerts.filter(a=>a.status!=='resolved').length;
+  return html`<div className="body">
+    <div className="eyebrow">Staff command console
+      ${tab==='night'?null:tab==='facilities'?html`<button className="btn sm" onClick=${()=>openModal({type:'repair'})}><${Icon} n="plus" s=${12} w=${3}/>Log repair</button>`
+       :html`<button className="btn sm" onClick=${()=>openModal({type:'need'})}><${Icon} n="plus" s=${12} w=${3}/>Post a need</button>`}</div>
+    <div className="tabs" role="tablist">
+      <button className=${tab==='approvals'?'on':''} onClick=${()=>setTab('approvals')}>Approvals${pending?html`<span className="n">${pending}</span>`:null}</button>
+      <button className=${tab==='facilities'?'on':''} onClick=${()=>setTab('facilities')}>Facilities${openM?html`<span className="n">${openM}</span>`:null}</button>
+      <button className=${tab==='needs'?'on':''} onClick=${()=>setTab('needs')}>Needs (${st.needs.length})</button>
+      <button className=${tab==='night'?'on':''} onClick=${()=>setTab('night')}>Night${openA?html`<span className="n">${openA}</span>`:null}</button>
+    </div>
+    ${tab==='approvals'&&html`<${React.Fragment}>
+      <div className="sec"><div className="eyebrow">Volunteer applications (${pv.length})</div>
+        ${pv.length?html`<div className="list">${pv.map(v=>html`<div key=${v.id} className="card">
+          <div className="row"><div className="ico"><${Icon} n="user"/></div><div className="grow"><div className="t">${v.name}${v.id==='me'?html` <span className="badge b-pending" style=${{marginLeft:4}}>You</span>`:null}</div><div className="s">${v.email}</div><div className="s">${v.interests.join(' · ')} — ${v.availability.join(', ')}</div></div></div>
+          <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'declined')}>Decline</button></div>
+        </div>`)}</div>`:html`<div className="empty">No volunteer applications waiting.</div>`}
+      </div>
+      <div className="sec"><div className="eyebrow">Workshop proposals (${pw.length})</div>
+        ${pw.length?html`<div className="list">${pw.map(w=>html`<div key=${w.id} className="card">
+          <div className="row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">${w.title}</div><div className="s">${w.category} · ${fmtWhen(w.when)} · by ${w.by}</div></div></div>
+          <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'rejected')}>Reject</button></div>
+        </div>`)}</div>`:html`<div className="empty">No workshops waiting for review.</div>`}
+      </div>
+      <div className="sec"><div className="eyebrow">Family aid requests (${pf.length})</div>
+        ${pf.length?html`<div className="list">${pf.map(r=>html`<div key=${r.id} className="card row" style=${{alignItems:'center'}}>
+          <div className="grow"><div className="t">${r.type}</div><div className="s">${r.recipient} · ${r.date}</div></div>
+          ${r.status==='Pending'?html`<button className="btn sm green" onClick=${()=>act.setFamily(r.id,'Approved')}>Approve</button>`:html`<button className="btn sm" onClick=${()=>act.setFamily(r.id,'Ready')}>Mark ready</button>`}
+        </div>`)}</div>`:html`<div className="empty">All family requests are handled.</div>`}
+      </div>
+    </${React.Fragment}>`}
+    ${tab==='facilities'&&html`<div className="sec"><div className="eyebrow">Campus repair log</div><div className="list">
+      ${st.maintenance.map(m=>html`<div key=${m.id} className="card row">
+        <div className="prio" style=${{background:m.priority==='High'?'var(--red)':m.priority==='Medium'?'var(--orange)':'#7BB89A'}}></div>
+        <div className="grow"><div className="t">${m.title}</div><div className="s">${m.area} · ${m.priority} priority${m.source==='Night Care'?' · reported by a parent at night':''}</div>
+          <div className="seg">${[['Open','o'],['In Progress','ip'],['Resolved','r']].map(([s,c])=>html`<button key=${s} className=${(m.status===s?'on ':'')+c} onClick=${()=>act.setMaint(m.id,s)}>${s}</button>`)}</div></div>
+      </div>`)}</div></div>`}
+    ${tab==='night'&&html`<${StaffNight} st=${st} act=${act}/>`}
+    ${tab==='needs'&&html`<div className="sec"><div className="eyebrow">Platform distribution directory (${st.needs.length})</div><div className="list">
+      ${st.needs.map(n=>html`<div key=${n.id} className="card">
+        <div className="row"><div className="grow"><div className="t">${n.title}</div><div className="s" style=${{textTransform:'uppercase',letterSpacing:'.1em',fontSize:12.5,fontWeight:700}}>${CAT[n.category]?.label||n.category}</div></div>${urgSmall(n.urgency)}</div>
+        <div className="bar dk" style=${{margin:'10px 0 8px'}}><i style=${{width:pctOf(n)+'%'}}></i></div>
+        <div className="meta"><span>Progress: <b>${pctOf(n)}%</b> (${fmtAmt(n,n.raised)}/${fmtAmt(n,n.target)})</span><span>${n.location}</span></div>
+      </div>`)}</div></div>`}
+  </div>`;
+}
+function NeedSheet({onClose,onSubmit}){
+  const [f,setF]=useState({title:'',category:'nutrition',urgency:'high',target:'',location:'',desc:''});
+  return html`<${Sheet} title="Post a need" eyebrow="Staff" onClose=${onClose}>
+    <${Field} label="Need title"><input id="n-title" className="inp" placeholder="e.g. Winter Blankets" value=${f.title} onChange=${e=>setF({...f,title:e.target.value})}/></${Field}>
+    <${Field} label="Category"><div className="chips">${Object.keys(CAT).map(c=>html`<button key=${c} className=${'chip'+(f.category===c?' on':'')} onClick=${()=>setF({...f,category:c})}><${Icon} n=${CAT[c].ic} s=${12}/>${CAT[c].label}</button>`)}</div></${Field}>
+    <${Field} label="Urgency"><div className="chips">${['critical','high','normal'].map(u=>html`<button key=${u} className=${'chip'+(f.urgency===u?' on':'')} style=${{textTransform:'capitalize'}} onClick=${()=>setF({...f,urgency:u})}>${u}</button>`)}</div></${Field}>
+    <div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+      <${Field} label="Target ($)"><input id="n-target" className="inp" inputMode="numeric" placeholder="1500" value=${f.target} onChange=${e=>setF({...f,target:e.target.value.replace(/[^0-9]/g,'')})}/></${Field}>
+      <${Field} label="Location"><input id="n-loc" className="inp" placeholder="Wing A" value=${f.location} onChange=${e=>setF({...f,location:e.target.value})}/></${Field}>
+    </div>
+    <${Field} label="Justification"><textarea id="n-desc" className="inp" placeholder="Who needs it and why now?" value=${f.desc} onChange=${e=>setF({...f,desc:e.target.value})}></textarea></${Field}>
+    <button className="btn block" disabled=${!f.title.trim()||!(+f.target>0)} onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${14}/>Publish need</button>
+  </${Sheet}>`;
+}
+function RepairSheet({onClose,onSubmit}){
+  const [f,setF]=useState({title:'',area:'',priority:'Medium'});
+  return html`<${Sheet} title="Log a repair" eyebrow="Facilities" onClose=${onClose}>
+    <${Field} label="What needs fixing?"><input id="r-title" className="inp" placeholder="e.g. Leaking tap in washroom" value=${f.title} onChange=${e=>setF({...f,title:e.target.value})}/></${Field}>
+    <${Field} label="Location"><input id="r-area" className="inp" placeholder="e.g. Wing A, Room 6" value=${f.area} onChange=${e=>setF({...f,area:e.target.value})}/></${Field}>
+    <${Field} label="Priority"><div className="chips">${['High','Medium','Low'].map(p=>html`<button key=${p} className=${'chip'+(f.priority===p?' on':'')} onClick=${()=>setF({...f,priority:p})}><span style=${{width:8,height:8,borderRadius:8,background:p==='High'?'var(--red)':p==='Medium'?'var(--orange)':'#7BB89A'}}></span>${p}</button>`)}</div></${Field}>
+    <button className="btn block" disabled=${!f.title.trim()} onClick=${()=>onSubmit(f)}><${Icon} n="wrench" s=${14}/>Add to repair log</button>
+  </${Sheet}>`;
+}
+
+/* ---------------- Parent ---------------- */
+const AID={'Grocery Aid':'box','School Supplies':'book','Hygiene Kit':'sparkles','Baby Formula':'baby'};
+function Parent({st,openModal}){
+  const active=st.familyRequests.filter(r=>r.status!=='Collected');
+  const acts=st.workshops.filter(w=>w.status==='approved').sort((a,b)=>a.when.localeCompare(b.when));
+  const badge=r=>r.status==='Ready'?html`<span className="badge b-ready">Ready for pickup</span>`:r.status==='Approved'?html`<span className="badge b-approved">Approved</span>`:html`<span className="badge b-pending">Pending</span>`;
+  return html`<div className="body">
+    <div className="eyebrow">Parent & family hub <button className="btn sm" onClick=${()=>openModal({type:'aid'})}><${Icon} n="send" s=${12}/>Request aid</button></div>
+    <div className="mintcard" style=${{padding:16}}>
+      <div style=${{display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:10,borderBottom:'1px solid rgba(11,46,31,.1)'}}><span style=${{fontSize:16,fontWeight:800}}>My active requests</span><b style=${{fontWeight:800,fontSize:18}}>${active.length} Active</b></div>
+      <p style=${{margin:'10px 0 0',fontSize:14,lineHeight:1.55,color:'#4c5d53'}}>Need school gear or dietary refills? Sahaay Parent Desk supplies essential food packs and learning bundles weekly from <b>Wing B Learning Desk</b>.</p>
+    </div>
+    <div className="sec"><div className="eyebrow">Active support requests</div>
+      ${active.length?html`<div className="list">${active.map(r=>html`<div key=${r.id} className="card">
+        <div className="row"><div className="grow">${badge(r)}<div className="t" style=${{marginTop:8}}>${r.type}</div><div className="s">Recipient: ${r.recipient}</div></div>
+          <div style=${{textAlign:'right'}}><div className="s" style=${{marginTop:0,fontVariantNumeric:'tabular-nums'}}>${r.date}</div>${r.status==='Ready'?html`<div style=${{marginTop:14,fontSize:13,fontWeight:800,color:'#2f9e6a',display:'flex',gap:4,alignItems:'center',justifyContent:'flex-end'}}><${Icon} n="pin" s=${12}/>${r.room||'Room 2'}</div>`:null}</div></div>
+      </div>`)}</div>`:html`<div className="empty">No requests yet. Tap Request aid to ask for groceries, school supplies, hygiene kits or baby formula.</div>`}
+    </div>
+    <div className="sec"><div className="eyebrow">Upcoming kids activities</div>
+      ${acts.length?html`<div className="list">${acts.map(w=>html`<div key=${w.id} className="card">
+        <div className="meta"><span style=${{color:'var(--warn)',fontWeight:800,fontSize:12.5}}>${w.category}</span><span>${fmtWhen(w.when)}</span></div>
+        <div className="t" style=${{marginTop:6}}>${w.title}</div><div className="s">Led by ${w.by}</div></div>`)}</div>`:html`<div className="empty">No activities scheduled yet.</div>`}
+    </div>
+    <div className="sec"><div className="eyebrow">Available aid programs</div>
+      <div className="hscroll">
+        <div className="prog" style=${{background:'var(--mint)'}}><div className="ico" style=${{background:'#fff'}}><${Icon} n="droplet"/></div><div className="t">Family Nutrition Pack</div><div className="s" style=${{color:'#4c5d53'}}>Weekly rations of grains, pulses, milk powder and fruit for each family room.</div></div>
+        <div className="prog" style=${{background:'var(--peach)'}}><div className="ico p" style=${{background:'#fff'}}><${Icon} n="book"/></div><div className="t">Learning Bundle</div><div className="s" style=${{color:'#4c5d53'}}>Notebooks, stationery and storybooks issued every term from the learning desk.</div></div>
+        <div className="prog" style=${{background:'var(--mint)'}}><div className="ico" style=${{background:'#fff'}}><${Icon} n="sparkles"/></div><div className="t">Hygiene Refill</div><div className="s" style=${{color:'#4c5d53'}}>Soap, toothpaste and sanitary supplies, refilled fortnightly.</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+function AidSheet({onClose,onSubmit}){
+  const [f,setF]=useState({type:'Grocery Aid',recipient:''});
+  return html`<${Sheet} title="Request aid" eyebrow="Parent desk" onClose=${onClose}>
+    <div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>${Object.keys(AID).map(t=>html`<button key=${t} className=${'chip'+(f.type===t?' on':'')} style=${{borderRadius:16,flexDirection:'column',padding:'14px 8px',justifyContent:'center'}} onClick=${()=>setF({...f,type:t})}><${Icon} n=${AID[t]} s=${20}/>${t}</button>`)}</div>
+    <${Field} label="For (child's name)"><input id="a-for" className="inp" placeholder="e.g. Rohan Sharma" value=${f.recipient} onChange=${e=>setF({...f,recipient:e.target.value})}/></${Field}>
+    <div className="note">Staff review requests the same day. You'll see the status change here, and the pickup room once it's ready.</div>
+    <button className="btn block" onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${14}/>Send request</button>
+  </${Sheet}>`;
+}
+
+/* ---------------- Night Care (parents, 6 PM – 10 AM, no staff on site) ---------------- */
+const ISSUES=[
+  {id:'fever',label:'Fever',ic:'flame',kind:'child'},
+  {id:'breath',label:'Breathing trouble',ic:'alert',kind:'child',emergency:true},
+  {id:'vomit',label:'Vomiting / loose motions',ic:'droplet',kind:'child'},
+  {id:'bleed',label:'Bleeding / injury',ic:'med',kind:'child'},
+  {id:'seizure',label:'Fainting / fits',ic:'alert',kind:'child',emergency:true},
+  {id:'pain',label:'Pain / discomfort',ic:'heart',kind:'child'},
+  {id:'scared',label:"Scared / can't sleep",ic:'moon',kind:'child'},
+  {id:'facility',label:'Power, water or room issue',ic:'wrench',kind:'facility'},
+];
+const GUIDE={
+  fever:{steps:['Check the temperature with the thermometer and note the time.','Children on cancer treatment can get serious infections quickly, so tell on-call staff about any fever.','Give water or ORS in small sips.','Keep clothing light and wipe the forehead with a damp cloth.',"Give only medicines your child's doctor has prescribed."],help:'Call 108 or go to the hospital if the child is shivering hard, very drowsy, or the doctor said to come in for any fever.'},
+  breath:{steps:['Call 108 now.','Sit the child upright and loosen tight clothing.','Keep the room airy. Stay calm and keep the child calm.','Do not give food or drink.'],help:'This is an emergency. Call 108 first, then raise the alert.'},
+  vomit:{steps:['Give ORS or water in small sips every few minutes.','If the child is drowsy, lay them on their side.','Note how many times it has happened.','Keep the child clean and change their clothes.'],help:"Get help now if there is blood, the child can't keep any fluids down, or is very drowsy."},
+  bleed:{steps:['Press a clean cloth firmly on the spot and keep holding.','For a nosebleed, sit the child up, lean them forward and pinch the soft part of the nose.','Children on treatment may bleed more easily. Tell on-call staff.'],help:"Call 108 if bleeding doesn't stop with firm pressure, or if the head is hurt."},
+  seizure:{steps:['Call 108 now.','Lay the child on their side on the floor, away from hard objects.','Do not put anything in their mouth or hold them down.','Note when it started and how long it lasts.'],help:'This is an emergency. Call 108 first, then raise the alert.'},
+  pain:{steps:['Ask where it hurts and how bad it is, from 0 to 10.','Help the child into a comfortable position.','Give only pain medicine the doctor prescribed, at the prescribed time.'],help:'Get help if the pain is severe, sudden, or keeps getting worse.'},
+  scared:{steps:['Stay close, keep a dim light on and speak softly.','Try a familiar routine: a story, a song, holding hands.','If the child seems unwell or in pain, raise a health alert instead.'],help:'Raise a "can wait" alert if you want staff to check in at 10 AM.'},
+  facility:{steps:['Move children away from any danger: sparks, water on the floor, broken glass.','If the power is out, use the torch kept in the room.','Your report goes to the morning repair list automatically.'],help:'If there is fire, smoke or a gas smell, leave the room and call 112.'},
+};
+const ALERT_STEPS=[['sent','Sent'],['seen','Seen by staff'],['escalated','Help arranged'],['resolved','Resolved']];
+const issueOf=id=>ISSUES.find(i=>i.id===id)||ISSUES[0];
+const offHours=()=>{const h=new Date().getHours();return h>=18||h<10};
+const NEEDS_INPUT='[NEEDS INPUT]';
+
+function Tracker({status}){
+  const idx=ALERT_STEPS.findIndex(s=>s[0]===status);
+  return html`<div style=${{display:'flex',gap:4,marginTop:10}}>${ALERT_STEPS.map(([k,l],i)=>html`<div key=${k} style=${{flex:1}}>
+    <div style=${{height:4,borderRadius:4,background:i<=idx?(status==='escalated'&&i===2?'var(--orange)':'var(--glow)'):'var(--line)'}}></div>
+    <div style=${{fontSize:11.5,fontWeight:700,marginTop:5,color:i<=idx?'var(--text)':'var(--muted)',letterSpacing:'.02em'}}>${l}</div></div>`)}</div>`;
+}
+function GuideSteps({id,compact}){
+  const g=GUIDE[id];
+  return html`<div style=${{display:'flex',flexDirection:'column',gap:8}}>
+    <ol style=${{margin:0,paddingLeft:18,display:'flex',flexDirection:'column',gap:6,fontSize:compact?12:13,lineHeight:1.45}}>${g.steps.map((s,i)=>html`<li key=${i}>${s}</li>`)}</ol>
+    <div className="impact" style=${{background:'rgba(232,132,44,.14)',color:'var(--text)'}}><${Icon} n="alert" s=${16}/><div>${g.help}</div></div></div>`;
+}
+function Night({st,act,openModal}){
+  const off=offHours();
+  const open=st.alerts.filter(a=>a.status!=='resolved');
+  const [openGuide,setOpenGuide]=useState(null);
+  return html`<div className="body">
+    <div className="banner"><div className="glyph"><${Icon} n="moon" s=${110} w=${1.5}/></div>
+      <span className=${'badge '+(off?'b-ready':'b-pending')} style=${{alignSelf:'flex-start'}}><span className="dot" style=${{width:5,height:5}}></span>${off?'Night Care is on':'Preview · staff on site now'}</span>
+      <h3>${off?'Staff are off duty until 10:00 AM':'Night Care starts at 6:00 PM'}</h3>
+      <p>Between 6 PM and 10 AM there is no staff at the centre. Raise an alert here and on-call staff are notified at once. Step-by-step help stays on screen while you wait.</p></div>
+
+    <div style=${{display:'flex',flexDirection:'column',gap:8}}>
+      <button className="btn block" style=${{padding:'16px',fontSize:13}} onClick=${()=>openModal({type:'alert'})}><${Icon} n="alert" s=${16}/>Raise an alert</button>
+      <a className="btn block ghost" href="tel:108" style=${{textDecoration:'none'}}><${Icon} n="phone" s=${14}/>Ambulance · 108</a>
+    </div>
+
+    <div className="sec"><div className="eyebrow">My alerts tonight ${open.length?html`<span className="live">${open.length} open</span>`:null}</div>
+      ${st.alerts.length?html`<div className="list">${st.alerts.map(a=>{const is=issueOf(a.issue);const showG=openGuide===a.id||(openGuide===null&&a.status!=='resolved'&&a===open[0]);return html`<div key=${a.id} className="card" style=${a.status!=='resolved'?{borderColor:'rgba(232,132,44,.5)'}:null}>
+        <div className="row"><div className="ico p"><${Icon} n=${is.ic}/></div><div className="grow">
+          <div className="t">${is.label}${a.child?' · '+a.child:''}</div>
+          <div className="s">${a.time} · ${a.urgency==='urgent'?'Urgent':'Can wait till morning'}${a.place?' · '+a.place:''}</div></div>
+          <span className=${'badge '+(a.status==='resolved'?'b-resolved':'b-open')}>${ALERT_STEPS.find(s=>s[0]===a.status)[1]}</span></div>
+        <${Tracker} status=${a.status}/>
+        ${a.reply?html`<div style=${{marginTop:12,background:'var(--soft)',borderRadius:'4px 14px 14px 14px',padding:'10px 12px',fontSize:12.5,lineHeight:1.45}}><div style=${{fontSize:12.5,fontWeight:800,color:'var(--label)',marginBottom:3}}>On-call staff · ${a.replyTime}</div>${a.reply}</div>`:a.status==='sent'?html`<div className="note" style=${{marginTop:10}}>Waiting for on-call staff. If your child gets worse, call 108 now. Don't wait for a reply.</div>`:null}
+        ${a.status!=='resolved'&&html`<${React.Fragment}>
+          <button className="btn sm ghost" style=${{marginTop:12,width:'100%'}} onClick=${()=>setOpenGuide(showG?'none':a.id)}>${showG?'Hide':'Show'} what to do now</button>
+          ${showG&&html`<div style=${{marginTop:12}}><${GuideSteps} id=${a.issue} compact=${true}/></div>`}
+          <button className="btn sm green" style=${{marginTop:10,width:'100%'}} onClick=${()=>act.alertStatus(a.id,'resolved','Parent marked it resolved')}><${Icon} n="check" s=${12} w=${3}/>My child is okay now</button>
+        </${React.Fragment}>`}
+      </div>`})}</div>`:html`<div className="empty">No alerts tonight. If something feels wrong, raise an alert. It's okay to ask.</div>`}
+    </div>
+
+    <div className="sec"><div className="eyebrow">Care notes from staff · 6 PM handover</div>
+      ${st.handover.length?html`<div className="list">${st.handover.map(h=>html`<div key=${h.id} className="card row">
+        <div className="ico"><${Icon} n="user"/></div><div className="grow"><div className="t">${h.child}</div><div className="s">${h.note}</div></div>
+        <span className=${'badge '+(h.risk==='High'?'b-open':h.risk==='Medium'?'b-pending':'b-resolved')}>${h.risk} risk</span></div>`)}</div>`:html`<div className="empty">No special care notes for tonight.</div>`}
+    </div>
+
+    <div className="sec"><div className="eyebrow">What to do if…</div>
+      <div className="note" style=${{color:'var(--warn)'}}>${NEEDS_INPUT} General first-aid steps for this prototype. Replace with St. Jude's and the partner hospital's approved care protocol before real use.</div>
+      <div className="card" style=${{padding:'4px 16px'}}>${ISSUES.map(i=>html`<button key=${i.id} className="check" onClick=${()=>openModal({type:'guide',id:i.id})}><${Icon} n=${i.ic} s=${16}/><span>${i.label}</span>${i.emergency?html`<span className="badge b-open" style=${{marginLeft:'auto'}}>Call 108</span>`:null}<span style=${{marginLeft:i.emergency?0:'auto',color:'var(--muted)'}}><${Icon} n="chevR" s=${14}/></span></button>`)}</div>
+    </div>
+
+    <div className="sec"><div className="eyebrow">Emergency contacts</div>
+      <div className="contacts">
+        <a className="contact med" href="tel:108"><b>Ambulance <${Icon} n="arrow" s=${13}/></b><span>108</span></a>
+        <a className="contact pol" href="tel:112"><b>Police / fire <${Icon} n="arrow" s=${13}/></b><span>112</span></a>
+        <div className="contact med" style=${{borderStyle:'dashed'}}><b>On-call staff</b><span style=${{fontSize:14,fontWeight:800}}>${NEEDS_INPUT}</span></div>
+        <div className="contact med" style=${{borderStyle:'dashed'}}><b>Partner hospital</b><span style=${{fontSize:14,fontWeight:800}}>${NEEDS_INPUT}</span></div>
+      </div>
+      <div className="note">If tapping doesn't open your dialer, dial the number shown.</div></div>
+
+    <div className="sec"><div className="eyebrow">Tonight's log</div>
+      <div className="card" style=${{padding:'6px 16px'}}>${st.nightLogs.map(l=>html`<div key=${l.id} style=${{display:'flex',gap:12,padding:'9px 0',borderBottom:'1px solid var(--line)',fontSize:14}}>
+        <span style=${{fontVariantNumeric:'tabular-nums',color:'var(--muted)',fontWeight:800,minWidth:62}}>${l.time}</span><span style=${{flex:1}}>${l.text}<span style=${{color:'var(--muted)'}}> · ${l.who}</span></span></div>`)}</div></div>
+  </div>`;
+}
+function AlertSheet({st,onClose,onSubmit}){
+  const [f,setF]=useState({issue:'fever',child:st.children[0]||'',urgency:'urgent',place:'',note:''});
+  const is=issueOf(f.issue);
+  return html`<${Sheet} title="Raise an alert" eyebrow="Night Care · on-call staff are notified" onClose=${onClose}>
+    <${Field} label="What's happening?"><div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>${ISSUES.map(i=>html`<button key=${i.id} className=${'chip'+(f.issue===i.id?' on':'')} style=${{borderRadius:14,justifyContent:'flex-start',fontSize:13.5,textAlign:'left'}} onClick=${()=>setF({...f,issue:i.id,urgency:i.id==='scared'?'morning':'urgent'})}><${Icon} n=${i.ic} s=${14}/>${i.label}</button>`)}</div></${Field}>
+    ${is.emergency&&html`<a className="btn block" href="tel:108" style=${{background:'var(--red)',textDecoration:'none'}}><${Icon} n="phone" s=${14}/>Call 108 first</a>`}
+    ${is.kind==='child'?html`<${Field} label="Which child?"><div className="chips">${st.children.map(c=>html`<button key=${c} className=${'chip'+(f.child===c?' on':'')} onClick=${()=>setF({...f,child:c})}>${c}</button>`)}</div></${Field}>`
+      :html`<${Field} label="Where?"><input id="al-place" className="inp" placeholder="e.g. Wing B, Room 4" value=${f.place} onChange=${e=>setF({...f,place:e.target.value})}/></${Field}>`}
+    <${Field} label="How soon is help needed?"><div className="chips">
+      <button className=${'chip'+(f.urgency==='urgent'?' on':'')} onClick=${()=>setF({...f,urgency:'urgent'})}>Urgent · now</button>
+      <button className=${'chip'+(f.urgency==='morning'?' on':'')} onClick=${()=>setF({...f,urgency:'morning'})}>Can wait till 10 AM</button></div></${Field}>
+    <${Field} label="Anything else? (optional)"><textarea id="al-note" className="inp" placeholder=${is.kind==='child'?'e.g. Temperature 101°F at 2:00 AM':'e.g. No power since 11 PM'} value=${f.note} onChange=${e=>setF({...f,note:e.target.value})}></textarea></${Field}>
+    <button className="btn block" onClick=${()=>onSubmit({...f,child:is.kind==='child'?f.child:'',place:is.kind==='facility'?f.place.trim():''})}><${Icon} n="send" s=${14}/>Send alert</button>
+  </${Sheet}>`;
+}
+function GuideSheet({id,onClose,onAlert}){
+  const is=issueOf(id);
+  return html`<${Sheet} title=${is.label} eyebrow="What to do now" onClose=${onClose}>
+    ${is.emergency&&html`<a className="btn block" href="tel:108" style=${{background:'var(--red)',textDecoration:'none'}}><${Icon} n="phone" s=${14}/>Call 108 now</a>`}
+    <${GuideSteps} id=${id}/>
+    <div className="note" style=${{color:'var(--warn)'}}>${NEEDS_INPUT} Prototype guidance. Replace with St. Jude's approved protocol.</div>
+    <button className="btn block" onClick=${onAlert}><${Icon} n="alert" s=${14}/>Raise an alert for this</button>
+  </${Sheet}>`;
+}
+
+/* Staff side: evening handover + night alerts */
+const QUICK=['On it. Calling you now.','Keep observing. Update me in 30 minutes.','Please call 108 and go to the hospital.','Give the prescribed medicine and recheck in 1 hour.'];
+function StaffNight({st,act}){
+  const [h,setH]=useState({child:st.children[0]||'',risk:'High',note:''});
+  const [reply,setReply]=useState({});
+  const open=st.alerts.filter(a=>a.status!=='resolved');
+  return html`<${React.Fragment}>
+    <div className="sec"><div className="eyebrow">Night alerts from parents (${open.length} open)</div>
+      ${st.alerts.length?html`<div className="list">${st.alerts.map(a=>{const is=issueOf(a.issue);return html`<div key=${a.id} className="card">
+        <div className="row"><div className="ico p"><${Icon} n=${is.ic}/></div><div className="grow"><div className="t">${is.label}${a.child?' · '+a.child:''}</div><div className="s">${a.time} · ${a.urgency==='urgent'?'Urgent':'Can wait till morning'}${a.place?' · '+a.place:''}</div>${a.note?html`<div className="s" style=${{color:'var(--text)'}}>"${a.note}"</div>`:null}</div>
+          <span className=${'badge '+(a.status==='resolved'?'b-resolved':'b-open')}>${ALERT_STEPS.find(s=>s[0]===a.status)[1]}</span></div>
+        ${a.status!=='resolved'&&html`<${React.Fragment}>
+          <div className="chips" style=${{marginTop:12}}>${QUICK.map(q=>html`<button key=${q} className=${'chip'+(reply[a.id]===q?' on':'')} style=${{fontSize:13,padding:'8px 12px'}} onClick=${()=>setReply({...reply,[a.id]:q})}>${q}</button>`)}</div>
+          <div style=${{display:'flex',gap:8,marginTop:10}}>
+            <button className="btn sm green" style=${{flex:1}} onClick=${()=>act.alertReply(a.id,reply[a.id]||'Seen. I am checking on this now.')}>${a.status==='sent'?'Acknowledge':'Send reply'}</button>
+            <button className="btn sm" style=${{flex:1}} onClick=${()=>act.alertStatus(a.id,'escalated','Staff arranged hospital / doctor help')}>Arrange help</button>
+            <button className="btn sm ghost" onClick=${()=>act.alertStatus(a.id,'resolved','Staff closed the alert')}>Close</button></div>
+        </${React.Fragment}>`}
+      </div>`})}</div>`:html`<div className="empty">No alerts from parents tonight.</div>`}
+    </div>
+    <div className="sec"><div className="eyebrow">Evening handover · before 6 PM</div>
+      <div className="list">${st.handover.map(x=>html`<div key=${x.id} className="card row" style=${{alignItems:'center'}}>
+        <div className="grow"><div className="t">${x.child} <span className=${'badge '+(x.risk==='High'?'b-open':x.risk==='Medium'?'b-pending':'b-resolved')}>${x.risk}</span></div><div className="s">${x.note}</div></div>
+        <button className="ibtn" style=${{background:'var(--soft)',color:'var(--text)'}} onClick=${()=>act.removeHandover(x.id)} aria-label=${'Remove note for '+x.child}><${Icon} n="x" s=${14}/></button></div>`)}</div>
+      <div className="card" style=${{display:'flex',flexDirection:'column',gap:10}}>
+        <${Field} label="Child"><div className="chips">${st.children.map(c=>html`<button key=${c} className=${'chip'+(h.child===c?' on':'')} onClick=${()=>setH({...h,child:c})}>${c}</button>`)}</div></${Field}>
+        <${Field} label="Risk tonight"><div className="chips">${['High','Medium','Low'].map(r=>html`<button key=${r} className=${'chip'+(h.risk===r?' on':'')} onClick=${()=>setH({...h,risk:r})}>${r}</button>`)}</div></${Field}>
+        <${Field} label="Care note for the parent"><textarea id="h-note" className="inp" placeholder="e.g. Check temperature at 10 PM and 2 AM" value=${h.note} onChange=${e=>setH({...h,note:e.target.value})}></textarea></${Field}>
+        <button className="btn block" disabled=${!h.note.trim()} onClick=${()=>{act.addHandover(h);setH({...h,note:''})}}><${Icon} n="plus" s=${12} w=${3}/>Add to tonight's handover</button>
+      </div>
+    </div>
+    <div className="sec"><div className="eyebrow">Night timeline · for the morning team</div>
+      <div className="card" style=${{padding:'6px 16px'}}>${st.nightLogs.map(l=>html`<div key=${l.id} style=${{display:'flex',gap:12,padding:'9px 0',borderBottom:'1px solid var(--line)',fontSize:14}}>
+        <span style=${{fontVariantNumeric:'tabular-nums',color:'var(--muted)',fontWeight:800,minWidth:62}}>${l.time}</span><span style=${{flex:1}}>${l.text}<span style=${{color:'var(--muted)'}}> · ${l.who}</span></span></div>`)}</div></div>
+  </${React.Fragment}>`;
+}
+
+
+/* ---------------- App ---------------- */
+function App(){
+  const [st,setSt]=useState(load);
+  const [menu,setMenu]=useState(false);
+  const [modal,setModal]=useState(null);
+  const [toast,setToast]=useState(null);
+  const [clock,setClock]=useState(()=>new Date());
+  const [confirmReset,setConfirmReset]=useState(false);
+  const scrollRef=useRef(null);
+  useEffect(()=>save(st),[st]);
+  useEffect(()=>{const t=setInterval(()=>setClock(new Date()),20000);return()=>clearInterval(t)},[]);
+  useEffect(()=>{if(!toast)return;const t=setTimeout(()=>setToast(null),2600);return()=>clearTimeout(t)},[toast]);
+  const up=fn=>setSt(s=>{const n=JSON.parse(JSON.stringify(s));fn(n);return n});
+  const say=m=>setToast(m);
+  const low=st.isLowLight===null?(st.role==='night'||isNightHour()):st.isLowLight;
+  const setRole=r=>{up(s=>{s.role=r;if(r==='night'&&s.isLowLight===false)s.isLowLight=null});setMenu(false);scrollRef.current&&scrollRef.current.scrollTo({top:0})};
+
+  const act={
+    donate(id,amt,units,name){up(s=>{const n=s.needs.find(x=>x.id===id);n.raised=Math.min(n.target,n.raised+units);s.donations.unshift({id:uid(),name,amount:amt,need:n.title,ago:'Just now'})});setModal(null);say(`Thank you! $${amt} added to ${st.needs.find(x=>x.id===id).title}.`)},
+    applyVolunteer(f){up(s=>{const me={id:'me',...f,name:f.name.trim(),status:'pending',hours:18.5};s.myVolunteerProfile=me;s.volunteers=s.volunteers.filter(v=>v.id!=='me');s.volunteers.unshift({...me})});say('Application sent to staff for verification.')},
+    reviewVolunteer(id,status){up(s=>{const v=s.volunteers.find(x=>x.id===id);v.status=status;if(id==='me'&&s.myVolunteerProfile)s.myVolunteerProfile.status=status});say(status==='approved'?'Volunteer approved. Their dashboard is now unlocked.':'Application declined.')},
+    proposeWorkshop(f){up(s=>{s.workshops.push({id:uid(),...f,title:f.title.trim(),by:s.myVolunteerProfile?.name||'Volunteer',status:'pending',mine:true})});setModal(null);say('Workshop sent to staff for review.')},
+    reviewWorkshop(id,status){up(s=>{s.workshops.find(x=>x.id===id).status=status});say(status==='approved'?'Workshop approved. Parents can now see it.':'Workshop rejected.')},
+    setMaint(id,status){up(s=>{s.maintenance.find(x=>x.id===id).status=status})},
+    addRepair(f){up(s=>{s.maintenance.unshift({id:uid(),title:f.title.trim(),area:f.area.trim()||'Campus',priority:f.priority,status:'Open',source:'Staff'})});setModal(null);say('Repair added to the log.')},
+    postNeed(f){up(s=>{s.needs.unshift({id:uid(),title:f.title.trim(),category:f.category,urgency:f.urgency,unit:'usd',unitCost:1,raised:0,target:+f.target,location:f.location.trim()||'Main campus',desc:f.desc.trim()||'Newly posted by staff.'})});setModal(null);say('Need published to contributors.')},
+    requestAid(f){up(s=>{s.familyRequests.unshift({id:uid(),type:f.type,recipient:f.recipient.trim()||'Family Support',date:today(),status:'Pending'})});setModal(null);say('Request sent to the Parent Desk.')},
+    setFamily(id,status){up(s=>{const r=s.familyRequests.find(x=>x.id===id);r.status=status;if(status==='Ready')r.room='Room 2'});say(status==='Ready'?'Family notified: ready for pickup in Room 2.':'Request approved.')},
+    raiseAlert(f){const is=issueOf(f.issue);const t=nowTime();up(s=>{s.alerts.unshift({id:uid(),issue:f.issue,child:f.child,place:f.place,urgency:f.urgency,note:f.note.trim(),time:t,status:'sent'});s.nightLogs.unshift({id:uid(),time:t,text:'Alert raised: '+is.label+(f.child?' · '+f.child:'')+(f.place?' · '+f.place:''),who:'Parent'});if(is.kind==='facility')s.maintenance.unshift({id:uid(),title:f.note.trim()||is.label,area:f.place||'Campus',priority:f.urgency==='urgent'?'High':'Medium',status:'Open',source:'Night Care'})});setModal(null);say(is.kind==='facility'?'Alert sent. Also added to the morning repair list.':'Alert sent to on-call staff.')},
+    alertReply(id,text){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.reply=text;a.replyTime=t;if(a.status==='sent')a.status='seen';s.nightLogs.unshift({id:uid(),time:t,text:'Replied: "'+text+'"',who:'On-call staff'})});say('Reply sent to the parent.')},
+    alertStatus(id,status,logText){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.status=status;if(status==='escalated'&&!a.reply){a.reply='Help is being arranged. Stay with your child and keep your phone close.';a.replyTime=t}s.nightLogs.unshift({id:uid(),time:t,text:logText+' ('+issueOf(a.issue).label+(a.child?', '+a.child:'')+')',who:status==='resolved'&&logText.startsWith('Parent')?'Parent':'On-call staff'})});say(status==='resolved'?'Alert closed.':'Help arranged. The parent can see it.')},
+    addHandover(h){up(s=>{s.handover.push({id:uid(),child:h.child,risk:h.risk,note:h.note.trim()})});say('Care note added for tonight.')},
+    removeHandover(id){up(s=>{s.handover=s.handover.filter(x=>x.id!==id)})},
+  };
+  const reset=()=>{const s=SEED();setSt(s);setConfirmReset(false);setMenu(false);say('Demo data restored.')};
+  const role=ROLES.find(r=>r.id===st.role)||ROLES[1];
+  const view={
+    contributor:html`<${Contributor} st=${st} openDonate=${id=>setModal({type:'donate',id})}/>`,
+    volunteer:html`<${Volunteer} st=${st} act=${act} setRole=${setRole} openWorkshop=${()=>setModal({type:'workshop'})}/>`,
+    staff:html`<${Staff} st=${st} act=${act} openModal=${setModal}/>`,
+    parent:html`<${Parent} st=${st} openModal=${setModal}/>`,
+    night:html`<${Night} st=${st} act=${act} openModal=${setModal}/>`,
+  }[role.id];
+  const t=clock.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s?[AP]M/,m=>' '+m.trim());
+
+  return html`<div className="stage">
+    <div className="device"><div className="notch"></div>
+      <div className=${'app'+(low?' night':'')}>
+        <div className="statusbar"><span>${t}</span><span className="r">5G <span className="batt"><i></i></span></span></div>
+        <div className="scroll" ref=${scrollRef}>
+          <header className="hdr">
+            <div className="hdr-top">
+              <div className="logo">S</div>
+              <div className="brand"><b>Sahaay</b><small>Community Shield</small></div>
+              <button className=${'ibtn'+(low?' ':'')} onClick=${()=>up(s=>{s.isLowLight=!low})} aria-label=${low?'Switch to day mode':'Switch to low-light mode'} title=${low?'Day mode':'Low-light mode'}><${Icon} n=${low?'sun':'moon'} s=${16}/></button>
+              <button className=${'ibtn'+(menu?' hot':'')} onClick=${()=>{setMenu(!menu);setConfirmReset(false)}} aria-label="Switch role" aria-expanded=${menu}><${Icon} n=${menu?'x':'menu'} s=${16}/></button>
+            </div>
+            <div className="quote">"The fight to live, begins with a place to live."</div>
+            <div className="mission"><span className="dot"></span>Active humanitarian mission</div>
+            <div className="rolechip"><${Icon} n=${role.ic} s=${12}/>${role.label} view${low?html` · <span style=${{color:'var(--glow)'}}>Low-light</span>`:null}</div>
+          </header>
+          <main key=${role.id} style=${{animation:'fade .3s'}}>${view}</main>
+        </div>
+        ${menu&&html`<${React.Fragment}><div className="scrim" onClick=${()=>setMenu(false)}></div>
+          <nav className="menu" style=${{top:window.innerWidth<=520?58:102}} aria-label="Select system role">
+            <div className="menu-h"><span>Choose a role</span><i>Demo</i></div>
+            ${ROLES.map(r=>html`<button key=${r.id} className=${'ropt'+(r.id===role.id?' on':'')} onClick=${()=>setRole(r.id)}>
+              <span className="ic"><${Icon} n=${r.ic} s=${16}/></span><span><b>${r.label}${r.id===role.id?' •':''}</b><small>${r.sub}</small></span></button>`)}
+            ${confirmReset?html`<div style=${{display:'flex',gap:8,padding:'8px 8px 2px',alignItems:'center',justifyContent:'center',fontSize:13,color:'#EAF4EE'}}>Restore demo data? <button className="btn sm" onClick=${reset}>Reset</button><button className="btn sm ghost" style=${{color:'#cfe3d7',borderColor:'#1d5a40'}} onClick=${()=>setConfirmReset(false)}>Cancel</button></div>`
+              :html`<button className="reset" onClick=${()=>setConfirmReset(true)}><${Icon} n="rotate" s=${12}/>Reset demo data</button>`}
+          </nav></${React.Fragment}>`}
+        ${modal?.type==='donate'&&html`<${DonateSheet} need=${st.needs.find(n=>n.id===modal.id)} onClose=${()=>setModal(null)} onDonate=${act.donate}/>`}
+        ${modal?.type==='workshop'&&html`<${WorkshopSheet} onClose=${()=>setModal(null)} onSubmit=${act.proposeWorkshop}/>`}
+        ${modal?.type==='need'&&html`<${NeedSheet} onClose=${()=>setModal(null)} onSubmit=${act.postNeed}/>`}
+        ${modal?.type==='repair'&&html`<${RepairSheet} onClose=${()=>setModal(null)} onSubmit=${act.addRepair}/>`}
+        ${modal?.type==='aid'&&html`<${AidSheet} onClose=${()=>setModal(null)} onSubmit=${act.requestAid}/>`}
+        ${modal?.type==='alert'&&html`<${AlertSheet} st=${st} onClose=${()=>setModal(null)} onSubmit=${act.raiseAlert}/>`}
+        ${modal?.type==='guide'&&html`<${GuideSheet} id=${modal.id} onClose=${()=>setModal(null)} onAlert=${()=>setModal({type:'alert'})}/>`}
+        ${toast&&html`<div className="toast" role="status"><${Icon} n="check" s=${16} w=${3}/>${toast}</div>`}
+        <div className="homebar"></div>
+      </div>
+    </div>
+    <div className="caption"><b>Sahaay Care System</b> · interactive prototype by Team Sahaay<br/>Tap ☰ to switch between Parent, Contributor, Volunteer, Staff and Night Care. Changes in one role show up in the others.</div>
+  </div>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
+
+</body>
+</html>
