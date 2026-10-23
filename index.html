@@ -18,6 +18,7 @@
   color-scheme:dark;
 }
 html,body{height:100%}
+#root{height:100%}
 body{background:var(--stage);color:var(--stage-fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -227,6 +228,37 @@ textarea.inp{resize:none;min-height:72px}
 .toast{position:absolute;left:16px;right:16px;bottom:30px;z-index:90;background:var(--forest);color:#EAF4EE;border:1px solid #1d5a40;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;display:flex;gap:10px;align-items:center;animation:up .25s ease-out;box-shadow:0 12px 30px -8px rgba(0,0,0,.4)}
 .toast svg{color:var(--glow);flex:none}
 
+/* staff dashboard, inventory, parent simple mode, website page */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:118px;transition:transform .12s,border-color .2s}
+.tile:hover{border-color:var(--muted)}.tile:active{transform:scale(.98)}
+.tile b{font-size:15px;line-height:1.25}.tile small{font-size:13px;color:var(--muted);font-weight:600}
+.tile-top{display:flex;justify-content:space-between;align-items:flex-start}
+.reddot{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(217,83,79,.18);flex:none;display:inline-block}
+.reddot.sm{width:8px;height:8px;box-shadow:none}
+.greendot{width:12px;height:12px;border-radius:50%;background:#2f9e6a;flex:none;display:inline-block}
+.back{display:inline-flex;align-items:center;gap:4px;font-weight:800;font-size:15px;color:var(--text);padding:6px 4px;margin-left:-4px}
+.pindots{display:flex;gap:14px;justify-content:center}
+.pindots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted)}
+.pindots i.on{background:var(--text);border-color:var(--text)}
+.keypad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;justify-content:center}
+.keypad button{height:60px;border-radius:50%;background:var(--soft);font-size:22px;font-weight:800;display:grid;place-items:center;color:var(--text)}
+.keypad button:active{background:var(--line)}
+.bigtiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bigtile{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:150px;justify-content:center}
+.bigtile:active{transform:scale(.98)}
+.bigtile .ico{width:60px;height:60px;border-radius:18px}
+.bigtile b{font-size:17px;line-height:1.2}
+.bigtile span[lang]{font-size:16px;color:var(--muted);font-weight:700}
+.bigtile.wide{flex-direction:row;min-height:0;justify-content:flex-start;gap:14px;padding:16px;width:100%}
+.bigtile.wide>span:last-child{display:flex;flex-direction:column;gap:2px}
+.webwrap{min-height:100vh;background:var(--cream);color:var(--ink)}
+.app.web{height:auto;min-height:100vh;border-radius:0;overflow:visible}
+.webhdr{background:var(--forest);color:#F3F7F4;display:flex;align-items:center;gap:10px;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.webmain{max-width:620px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.webh1{font-size:26px;font-weight:900;line-height:1.2;margin:4px 0 0;text-wrap:balance}
+.logo img{width:26px;height:26px;object-fit:contain;display:block}
+.logo{background:#FFFDF7}
 @media (max-width:520px){
   .stage{padding:0;gap:0;justify-content:stretch;height:100%}
   .caption,.notch{display:none}
@@ -249,6 +281,7 @@ textarea.inp{resize:none;min-height:72px}
 <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
 <script>
 const {useState,useEffect,useRef,useMemo} = React;
+const LOGO='data:image/png;base64,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';
 const html = htm.bind(React.createElement);
 
 /* ---------------- Icons (lucide-style strokes) ---------------- */
@@ -314,17 +347,19 @@ const SEED = () => ({
     {id:'w3',title:'Clay Modelling & Fine Motor Play',category:'Arts',when:'2026-07-12T15:00',by:'Sana Qureshi',status:'pending'},
   ],
   maintenance:[
-    {id:'m1',title:'Water filter cartridge replacement',area:'Kitchen block',priority:'High',status:'Open',source:'Staff'},
+    {id:'m1',title:'Water filter cartridge replacement',area:'Kitchen block',priority:'High',status:'Open',source:'Staff',kind:'Repair'},
+    {id:'m4',title:'Noise in corridor after 10 PM',area:'Wing B',priority:'Medium',status:'Open',source:'Staff',kind:'Complaint'},
+    {id:'m5',title:'Milk powder delivery short by 10 packs',area:'Parel Centre store',priority:'High',status:'In Progress',source:'Staff',kind:'Stock'},
     {id:'m2',title:'Ceiling fan repair',area:'Wing C, Room 4',priority:'Medium',status:'In Progress',source:'Staff'},
     {id:'m3',title:'Loose step tread on stairwell',area:'Main staircase',priority:'Low',status:'Resolved',source:'Staff'},
   ],
   familyRequests:[
-    {id:'f1',type:'School Supplies',recipient:'Rohan Sharma',date:'2026-06-27',status:'Approved'},
-    {id:'f2',type:'Grocery Aid',recipient:'Family Support',date:'2026-06-28',status:'Ready',room:'Room 2'},
+    {id:'f1',type:'School Supplies',recipient:'Rohan',date:'2026-10-20',status:'Approved'},
+    {id:'f2',type:'Grocery Aid',recipient:'Aarav',date:'2026-10-21',status:'Ready',room:'Room 2'},
   ],
-  children:['Aarav Sharma','Rohan Sharma'],
+  children:['Aarav','Rohan'],
   handover:[
-    {id:'h1',child:'Aarav Sharma',risk:'High',note:'Fever history. Needs close observation tonight.'},
+    {id:'h1',child:'Aarav',risk:'High',note:'Fever history. Needs close observation tonight.'},
   ],
   alerts:[],
   nightLogs:[
@@ -334,12 +369,52 @@ const SEED = () => ({
     {id:'d1',name:'Kavya M.',amount:30,need:'Sanitary & Hygiene Kits',ago:'2 days ago'},
   ],
   stats:{hours:1420,families:318},
+  centres:['Parel Centre','Kharghar Centre'],
+  centre:'Parel Centre',
+  inventory:[
+    {id:'i1',name:'Rice',unit:'kg',qty:40,inStock:true,procure:false,centre:'Parel Centre'},
+    {id:'i2',name:'Toor dal',unit:'kg',qty:12,inStock:true,procure:false,centre:'Parel Centre'},
+    {id:'i3',name:'Milk powder',unit:'packs',qty:0,inStock:false,procure:true,centre:'Parel Centre'},
+    {id:'i4',name:'Bath soap',unit:'bars',qty:30,inStock:true,procure:false,centre:'Parel Centre'},
+    {id:'i5',name:'Sanitary pads',unit:'packs',qty:0,inStock:false,procure:true,centre:'Parel Centre'},
+    {id:'i6',name:'ORS sachets',unit:'sachets',qty:8,inStock:true,procure:true,centre:'Parel Centre'},
+    {id:'i7',name:'Notebooks',unit:'books',qty:60,inStock:true,procure:false,centre:'Parel Centre'},
+    {id:'i8',name:'Rice',unit:'kg',qty:25,inStock:true,procure:false,centre:'Kharghar Centre'},
+    {id:'i9',name:'Milk powder',unit:'packs',qty:10,inStock:true,procure:false,centre:'Kharghar Centre'},
+    {id:'i10',name:'Bath soap',unit:'bars',qty:0,inStock:false,procure:true,centre:'Kharghar Centre'},
+    {id:'i11',name:'Bedsheets',unit:'pieces',qty:14,inStock:true,procure:false,centre:'Kharghar Centre'},
+  ],
+  register:[
+    {id:'g1',dir:'in',item:'Rice',qty:50,unit:'kg',centre:'Parel Centre',date:'2026-10-20',note:'Monthly ration'},
+    {id:'g2',dir:'out',item:'Milk powder',qty:6,unit:'packs',centre:'Parel Centre',date:'2026-10-21',note:'Rooms 1–6'},
+    {id:'g3',dir:'out',item:'Rice',qty:10,unit:'kg',centre:'Parel Centre',date:'2026-10-22',note:'Kitchen'},
+    {id:'g4',dir:'in',item:'Bedsheets',qty:20,unit:'pieces',centre:'Kharghar Centre',date:'2026-10-19',note:'Donation'},
+  ],
+  queries:[
+    {id:'q1',name:'Priya D.',contact:'priya.d@mail.com',type:'Donation',centre:'Kharghar Centre',msg:'I would like to donate 20 blankets this month. Where should I drop them?',source:'Website',status:'New',date:'2026-10-22'},
+    {id:'q2',name:'Room 4 parent',contact:'',type:'Call back',centre:'Parel Centre',msg:'Please call me about food or supplies.',source:'App (parent)',status:'Replied',date:'2026-10-21',reply:'Please visit the centre desk with this request.'},
+  ],
+  polls:[
+    {id:'p1',q:'Can you cover the Saturday 10 AM – 1 PM tutoring slot?',aud:'Volunteers',yes:3,no:1,votes:{}},
+    {id:'p2',q:'Move the monthly parents meeting to Sunday?',aud:'Staff',yes:2,no:2,votes:{}},
+  ],
+  activity:[
+    {id:'a1',date:'2026-10-22',time:'04:10 PM',cat:'Queries',text:'Website query from Priya D. (Donation)',who:'Website'},
+    {id:'a2',date:'2026-10-22',time:'11:30 AM',cat:'Inventory',text:'Outward: 10 kg Rice at Parel Centre (Kitchen)',who:'Staff'},
+    {id:'a3',date:'2026-10-21',time:'05:45 PM',cat:'Families',text:'Grocery Aid for Aarav ready for pickup in Room 2',who:'Staff'},
+    {id:'a4',date:'2026-10-21',time:'10:20 AM',cat:'Inventory',text:'Outward: 6 packs Milk powder at Parel Centre (Rooms 1–6)',who:'Staff'},
+    {id:'a5',date:'2026-10-20',time:'03:15 PM',cat:'Donations',text:'Kavya M. gave $30 to Sanitary & Hygiene Kits',who:'Contributor'},
+    {id:'a6',date:'2026-10-20',time:'11:40 AM',cat:'Inventory',text:'Inward: 50 kg Rice at Parel Centre (Monthly ration)',who:'Staff'},
+    {id:'a7',date:'2026-10-19',time:'02:00 AM',cat:'Night',text:'Alert raised: Fever · Aarav. On-call staff replied in 2 minutes',who:'Parent'},
+    {id:'a8',date:'2026-10-18',time:'11:00 AM',cat:'Volunteers',text:'Workshop held: Interactive English Storytelling (Aarav Sharma)',who:'Volunteer'},
+  ],
+  parentSimple:true,
   myVolunteerProfile:null,
   myWorkshops:[],
   isLowLight:null,
   role:'contributor',
 });
-const KEY='sahaay-care-v2';
+const KEY='sahaay-care-v3';
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.needs)return {...SEED(),...s}}catch(e){}return SEED()}
 function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
 const uid=()=>Math.random().toString(36).slice(2,8);
@@ -351,10 +426,10 @@ const today=()=>new Date().toLocaleDateString('en-CA');
 const isNightHour=()=>{const h=new Date().getHours();return h>=20||h<6};
 
 const ROLES=[
-  {id:'parent',label:'Parent',ic:'home',sub:'Request grocery aid or school supplies for kids'},
+  {id:'parent',label:'Parent',ic:'home',sub:'Simple, picture-based requests in English and Hindi'},
   {id:'contributor',label:'Contributor',ic:'heart',sub:'Donate and sponsor active relief programs'},
   {id:'volunteer',label:'Volunteer',ic:'user',sub:'Onboard shifts and propose education classes'},
-  {id:'staff',label:'Staff',ic:'shield',sub:'Post direct needs or approve volunteer requests'},
+  {id:'staff',label:'Staff',ic:'shield',sub:'Inventory, queries, approvals and records in one place'},
   {id:'night',label:'Night Care',ic:'moon',sub:'For parents after staff hours, 6 PM – 10 AM'},
 ];
 
@@ -402,6 +477,13 @@ function Contributor({st,openDonate}){
         </article>`)}
       </div>
       <div className="dots">${needs.map((n,i)=>html`<i key=${n.id} className=${i===idx?'on':''}></i>`)}</div>
+    </div>
+    <div className="sec">
+      <div className="eyebrow">Centres are running low on <span className="live">Live from inventory</span></div>
+      ${st.inventory.filter(i=>i.procure).length?html`<div className="card" style=${{padding:'4px 16px'}}>${st.inventory.filter(i=>i.procure).map(i=>html`<div key=${i.id} style=${{display:'flex',gap:10,alignItems:'center',padding:'11px 0',borderBottom:'1px solid var(--line)'}}>
+        <span className="reddot sm"></span><span style=${{flex:1,fontWeight:700}}>${i.name}</span><span className="s" style=${{marginTop:0}}>${i.centre}</span></div>`)}</div>`
+        :html`<div className="empty">Everything is in stock right now.</div>`}
+      <div className="note">Prefer not to install the app? <a href="#query" style=${{color:'var(--text)',fontWeight:800}}>Send a query from the website</a> and the team will get back to you.</div>
     </div>
     <div className="sec">
       <div className="eyebrow">Continue where you left off</div>
@@ -480,6 +562,10 @@ function Volunteer({st,act,setRole,openWorkshop}){
     </div>
     <div className="sec"><div className="eyebrow">Next shift</div>
       <div className="card row"><div className="ico"><${Icon} n="cal"/></div><div className="grow"><div className="t">${me.interests[0]}</div><div className="s">${me.availability[0]} · Wing B Learning Desk</div></div><span className="badge b-approved">Confirmed</span></div></div>
+    <${Polls} st=${st} act=${act} who="Volunteer"/>
+    <div className="sec"><div className="eyebrow">My history</div>
+      ${st.activity.filter(a=>a.text.includes(me.name)).length?html`<div className="card" style=${{padding:'4px 16px'}}>${st.activity.filter(a=>a.text.includes(me.name)).slice(0,6).map(a=>html`<div key=${a.id} style=${{display:'flex',gap:12,padding:'10px 0',borderBottom:'1px solid var(--line)',fontSize:14}}><span style=${{color:'var(--muted)',fontWeight:800,minWidth:84,fontVariantNumeric:'tabular-nums'}}>${a.date}</span><span style=${{flex:1}}>${a.text}</span></div>`)}</div>`
+        :html`<div className="empty">Your approvals, workshops and shifts will be listed here.</div>`}</div>
     <div className="sec"><div className="eyebrow">My workshop proposals <button className="btn sm" onClick=${openWorkshop}><${Icon} n="plus" s=${12} w=${3}/>Propose</button></div>
       ${mine.length?html`<div className="list">${mine.map(w=>html`<div key=${w.id} className="card row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">${w.title}</div><div className="s">${w.category} · ${fmtWhen(w.when)}</div></div><span className=${'badge '+(w.status==='approved'?'b-approved':w.status==='rejected'?'b-declined':'b-pending')}>${w.status}</span></div>`)}</div>`
       :html`<div className="empty">Share a skill with the children. Propose a class and staff will review it; approved classes show up for parents.</div>`}
@@ -496,60 +582,234 @@ function WorkshopSheet({onClose,onSubmit}){
   </${Sheet}>`;
 }
 
-/* ---------------- Staff ---------------- */
-function Staff({st,act,openModal}){
-  const [tab,setTab]=useState('approvals');
+/* ---------------- Staff: secure sign-in + dashboard ---------------- */
+const STAFF_PIN='1234';
+const SECTIONS=[
+  {id:'approvals',label:'Approvals',ic:'check',sub:'Volunteers, workshops, family requests'},
+  {id:'inbox',label:'Queries inbox',ic:'send',sub:'From the website and the app'},
+  {id:'inventory',label:'Inventory',ic:'box',sub:'Inward / outward, stock, to procure'},
+  {id:'repairs',label:'Repairs & complaints',ic:'wrench',sub:'Facilities, stock issues, complaints'},
+  {id:'needs',label:'Needs for donors',ic:'heart',sub:'What contributors see'},
+  {id:'night',label:'Night care',ic:'moon',sub:'Handover and parent alerts'},
+  {id:'polls',label:'Yes / No polls',ic:'users',sub:'Quick decisions with the team'},
+  {id:'records',label:'Records',ic:'book',sub:'Search all past activity'},
+];
+function PinLock({onUnlock}){
+  const [pin,setPin]=useState('');const [err,setErr]=useState(false);
+  const press=d=>{if(pin.length>=4)return;const p=pin+d;setPin(p);setErr(false);
+    if(p.length===4){if(p===STAFF_PIN)setTimeout(onUnlock,150);else setTimeout(()=>{setPin('');setErr(true)},250)}};
+  return html`<div className="body" style=${{alignItems:'center',textAlign:'center'}}>
+    <div className="ico" style=${{width:56,height:56,borderRadius:18}}><${Icon} n="lock" s=${26}/></div>
+    <div><div className="t" style=${{fontSize:18}}>Staff sign-in</div><div className="s">Use your own phone. Enter your 4-digit PIN to open the staff side.</div></div>
+    <div className="pindots" aria-label=${pin.length+' of 4 digits entered'}>${[0,1,2,3].map(i=>html`<i key=${i} className=${i<pin.length?'on':''}></i>`)}</div>
+    ${err?html`<div className="s" style=${{color:'var(--red)',marginTop:0}}>That PIN didn't match. Try again.</div>`:null}
+    <div className="keypad">${['1','2','3','4','5','6','7','8','9','','0','del'].map((k,i)=>k===''?html`<span key=${i}></span>`:html`<button key=${i} onClick=${()=>k==='del'?setPin(pin.slice(0,-1)):press(k)} aria-label=${k==='del'?'Delete digit':k}>${k==='del'?html`<${Icon} n="chevL" s=${20}/>`:k}</button>`)}</div>
+    <div className="note">Demo PIN: 1234</div>
+  </div>`;
+}
+function Staff({st,act,openModal,unlocked,unlock,lock}){
+  const [sec,setSec]=useState(null);
+  if(!unlocked) return html`<${PinLock} onUnlock=${unlock}/>`;
+  const inv=st.inventory.filter(i=>i.centre===st.centre);
+  const counts={
+    approvals:st.volunteers.filter(v=>v.status==='pending').length+st.workshops.filter(w=>w.status==='pending').length+st.familyRequests.filter(r=>r.status==='Pending').length,
+    inbox:st.queries.filter(q=>q.status==='New').length,
+    inventory:inv.filter(i=>i.procure).length,
+    repairs:st.maintenance.filter(m=>m.status!=='Resolved').length,
+    needs:st.needs.length,
+    night:st.alerts.filter(a=>a.status!=='resolved').length,
+    polls:st.polls.filter(p=>!(p.votes||{}).Staff&&p.aud!=='Volunteers').length,
+    records:st.activity.length,
+  };
+  const hint={approvals:'waiting',inbox:'new',inventory:'to procure',repairs:'open',needs:'live',night:'open alerts',polls:'to answer',records:'entries'};
+  const urgent={approvals:1,inbox:1,inventory:1,repairs:1,night:1,polls:1};
+  const S=SECTIONS.find(x=>x.id===sec);
+  return html`<div className="body">
+    <div className="eyebrow">${S?html`<button className="back" onClick=${()=>setSec(null)}><${Icon} n="chevL" s=${16}/>Staff home</button>`:'Staff home'}
+      <button className="btn sm ghost" onClick=${lock}><${Icon} n="lock" s=${12}/>Lock</button></div>
+    <div className="chips" role="radiogroup" aria-label="Centre">${st.centres.map(c=>html`<button key=${c} className=${'chip'+(st.centre===c?' on':'')} onClick=${()=>act.setCentre(c)} aria-pressed=${st.centre===c}><${Icon} n="pin" s=${12}/>${c}</button>`)}</div>
+    ${!S?html`<${React.Fragment}><div className="tiles">${SECTIONS.map(x=>{const n=counts[x.id];const hot=urgent[x.id]&&n>0;return html`<button key=${x.id} className="tile" onClick=${()=>setSec(x.id)}>
+        <span className="tile-top"><span className=${'ico'+(hot?' p':'')}><${Icon} n=${x.ic}/></span>${hot?html`<span className="reddot" aria-hidden="true"></span>`:null}</span>
+        <b>${x.label}</b><small>${n} ${hint[x.id]}</small></button>`})}</div>
+      <div className="note">Queries, alerts and stock updates come here instead of calls to staff phones after work.</div></${React.Fragment}>`:null}
+    ${sec==='approvals'?html`<${StaffApprovals} st=${st} act=${act} openModal=${openModal}/>`:null}
+    ${sec==='inbox'?html`<${StaffInbox} st=${st} act=${act}/>`:null}
+    ${sec==='inventory'?html`<${StaffInventory} st=${st} act=${act} openModal=${openModal}/>`:null}
+    ${sec==='repairs'?html`<${StaffRepairs} st=${st} act=${act} openModal=${openModal}/>`:null}
+    ${sec==='needs'?html`<${StaffNeeds} st=${st} openModal=${openModal}/>`:null}
+    ${sec==='night'?html`<${StaffNight} st=${st} act=${act}/>`:null}
+    ${sec==='polls'?html`<${Polls} st=${st} act=${act} who="Staff" openModal=${openModal}/>`:null}
+    ${sec==='records'?html`<${Records} st=${st}/>`:null}
+  </div>`;
+}
+function StaffApprovals({st,act,openModal}){
   const pv=st.volunteers.filter(v=>v.status==='pending');
   const pw=st.workshops.filter(w=>w.status==='pending');
   const pf=st.familyRequests.filter(r=>r.status==='Pending'||r.status==='Approved');
-  const pending=pv.length+pw.length+st.familyRequests.filter(r=>r.status==='Pending').length;
-  const openM=st.maintenance.filter(m=>m.status!=='Resolved').length;
-  const openA=st.alerts.filter(a=>a.status!=='resolved').length;
-  return html`<div className="body">
-    <div className="eyebrow">Staff command console
-      ${tab==='night'?null:tab==='facilities'?html`<button className="btn sm" onClick=${()=>openModal({type:'repair'})}><${Icon} n="plus" s=${12} w=${3}/>Log repair</button>`
-       :html`<button className="btn sm" onClick=${()=>openModal({type:'need'})}><${Icon} n="plus" s=${12} w=${3}/>Post a need</button>`}</div>
-    <div className="tabs" role="tablist">
-      <button className=${tab==='approvals'?'on':''} onClick=${()=>setTab('approvals')}>Approvals${pending?html`<span className="n">${pending}</span>`:null}</button>
-      <button className=${tab==='facilities'?'on':''} onClick=${()=>setTab('facilities')}>Facilities${openM?html`<span className="n">${openM}</span>`:null}</button>
-      <button className=${tab==='needs'?'on':''} onClick=${()=>setTab('needs')}>Needs (${st.needs.length})</button>
-      <button className=${tab==='night'?'on':''} onClick=${()=>setTab('night')}>Night${openA?html`<span className="n">${openA}</span>`:null}</button>
+  return html`<${React.Fragment}>
+    <div className="sec"><div className="eyebrow">Volunteer applications (${pv.length})</div>
+      ${pv.length?html`<div className="list">${pv.map(v=>html`<div key=${v.id} className="card">
+        <div className="row"><div className="ico"><${Icon} n="user"/></div><div className="grow"><div className="t">${v.name}${v.id==='me'?html` <span className="badge b-pending" style=${{marginLeft:4}}>You</span>`:null}</div><div className="s">${v.email}</div><div className="s">${v.interests.join(' · ')} — ${v.availability.join(', ')}</div></div></div>
+        <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'declined')}>Decline</button></div>
+      </div>`)}</div>`:html`<div className="empty">No volunteer applications waiting.</div>`}
     </div>
-    ${tab==='approvals'&&html`<${React.Fragment}>
-      <div className="sec"><div className="eyebrow">Volunteer applications (${pv.length})</div>
-        ${pv.length?html`<div className="list">${pv.map(v=>html`<div key=${v.id} className="card">
-          <div className="row"><div className="ico"><${Icon} n="user"/></div><div className="grow"><div className="t">${v.name}${v.id==='me'?html` <span className="badge b-pending" style=${{marginLeft:4}}>You</span>`:null}</div><div className="s">${v.email}</div><div className="s">${v.interests.join(' · ')} — ${v.availability.join(', ')}</div></div></div>
-          <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewVolunteer(v.id,'declined')}>Decline</button></div>
-        </div>`)}</div>`:html`<div className="empty">No volunteer applications waiting.</div>`}
-      </div>
-      <div className="sec"><div className="eyebrow">Workshop proposals (${pw.length})</div>
-        ${pw.length?html`<div className="list">${pw.map(w=>html`<div key=${w.id} className="card">
-          <div className="row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">${w.title}</div><div className="s">${w.category} · ${fmtWhen(w.when)} · by ${w.by}</div></div></div>
-          <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'rejected')}>Reject</button></div>
-        </div>`)}</div>`:html`<div className="empty">No workshops waiting for review.</div>`}
-      </div>
-      <div className="sec"><div className="eyebrow">Family aid requests (${pf.length})</div>
-        ${pf.length?html`<div className="list">${pf.map(r=>html`<div key=${r.id} className="card row" style=${{alignItems:'center'}}>
-          <div className="grow"><div className="t">${r.type}</div><div className="s">${r.recipient} · ${r.date}</div></div>
-          ${r.status==='Pending'?html`<button className="btn sm green" onClick=${()=>act.setFamily(r.id,'Approved')}>Approve</button>`:html`<button className="btn sm" onClick=${()=>act.setFamily(r.id,'Ready')}>Mark ready</button>`}
-        </div>`)}</div>`:html`<div className="empty">All family requests are handled.</div>`}
-      </div>
-    </${React.Fragment}>`}
-    ${tab==='facilities'&&html`<div className="sec"><div className="eyebrow">Campus repair log</div><div className="list">
-      ${st.maintenance.map(m=>html`<div key=${m.id} className="card row">
-        <div className="prio" style=${{background:m.priority==='High'?'var(--red)':m.priority==='Medium'?'var(--orange)':'#7BB89A'}}></div>
-        <div className="grow"><div className="t">${m.title}</div><div className="s">${m.area} · ${m.priority} priority${m.source==='Night Care'?' · reported by a parent at night':''}</div>
-          <div className="seg">${[['Open','o'],['In Progress','ip'],['Resolved','r']].map(([s,c])=>html`<button key=${s} className=${(m.status===s?'on ':'')+c} onClick=${()=>act.setMaint(m.id,s)}>${s}</button>`)}</div></div>
-      </div>`)}</div></div>`}
-    ${tab==='night'&&html`<${StaffNight} st=${st} act=${act}/>`}
-    ${tab==='needs'&&html`<div className="sec"><div className="eyebrow">Platform distribution directory (${st.needs.length})</div><div className="list">
-      ${st.needs.map(n=>html`<div key=${n.id} className="card">
-        <div className="row"><div className="grow"><div className="t">${n.title}</div><div className="s" style=${{textTransform:'uppercase',letterSpacing:'.1em',fontSize:12.5,fontWeight:700}}>${CAT[n.category]?.label||n.category}</div></div>${urgSmall(n.urgency)}</div>
-        <div className="bar dk" style=${{margin:'10px 0 8px'}}><i style=${{width:pctOf(n)+'%'}}></i></div>
-        <div className="meta"><span>Progress: <b>${pctOf(n)}%</b> (${fmtAmt(n,n.raised)}/${fmtAmt(n,n.target)})</span><span>${n.location}</span></div>
-      </div>`)}</div></div>`}
+    <div className="sec"><div className="eyebrow">Workshop proposals (${pw.length})</div>
+      ${pw.length?html`<div className="list">${pw.map(w=>html`<div key=${w.id} className="card">
+        <div className="row"><div className="ico p"><${Icon} n="book"/></div><div className="grow"><div className="t">${w.title}</div><div className="s">${w.category} · ${fmtWhen(w.when)} · by ${w.by}</div></div></div>
+        <div style=${{display:'flex',gap:8,marginTop:12}}><button className="btn sm green" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'approved')}><${Icon} n="check" s=${12} w=${3}/>Approve</button><button className="btn sm redo" style=${{flex:1}} onClick=${()=>act.reviewWorkshop(w.id,'rejected')}>Reject</button></div>
+      </div>`)}</div>`:html`<div className="empty">No workshops waiting for review.</div>`}
+    </div>
+    <div className="sec"><div className="eyebrow">Family aid requests (${pf.length}) <button className="btn sm" onClick=${()=>openModal({type:'aid',byStaff:true})}><${Icon} n="plus" s=${12} w=${3}/>For a parent</button></div>
+      <div className="note">Parents who find the app hard can ask at the desk. Raise the request for them here.</div>
+      ${pf.length?html`<div className="list">${pf.map(r=>html`<div key=${r.id} className="card row" style=${{alignItems:'center'}}>
+        <div className="grow"><div className="t">${r.type}</div><div className="s">${r.recipient} · ${r.date}${r.by==='Staff'?' · raised by staff':''}</div></div>
+        ${r.status==='Pending'?html`<button className="btn sm green" onClick=${()=>act.setFamily(r.id,'Approved')}>Approve</button>`:html`<button className="btn sm" onClick=${()=>act.setFamily(r.id,'Ready')}>Mark ready</button>`}
+      </div>`)}</div>`:html`<div className="empty">All family requests are handled.</div>`}
+    </div>
+  </${React.Fragment}>`;
+}
+const QREPLY=['Thank you! We will call you during office hours (10 AM – 6 PM).','Please visit the centre desk with this request.','Thank you, we have noted your donation offer.'];
+function StaffInbox({st,act}){
+  const [f,setF]=useState('Open');const [pick,setPick]=useState({});
+  const list=st.queries.filter(q=>f==='All'||(f==='Open'?q.status!=='Closed':q.status==='Closed'));
+  return html`<div className="sec">
+    <div className="eyebrow">Queries inbox</div>
+    <div className="note">Website visitors and parents send queries here, so they don't need to install the app or call staff phones.</div>
+    <div className="seg" style=${{marginTop:0}}>${['Open','Closed','All'].map(x=>html`<button key=${x} className=${f===x?'on r':''} onClick=${()=>setF(x)}>${x}</button>`)}</div>
+    ${list.length?html`<div className="list">${list.map(q=>html`<div key=${q.id} className="card">
+      <div className="row"><div className=${'ico'+(q.source==='Website'?' p':'')}><${Icon} n=${q.source==='Website'?'arrow':'phone'}/></div>
+        <div className="grow"><div className="t">${q.name} · ${q.type}</div><div className="s">${q.date} · via ${q.source}${q.contact?' · '+q.contact:''}${q.centre?' · '+q.centre:''}</div>
+          <div className="s" style=${{color:'var(--text)'}}>"${q.msg}"</div>
+          ${q.reply?html`<div className="s" style=${{color:'var(--label)'}}>Reply sent: ${q.reply}</div>`:null}</div>
+        <span className=${'badge '+(q.status==='New'?'b-open':q.status==='Replied'?'b-pending':'b-resolved')}>${q.status}</span></div>
+      ${q.status!=='Closed'?html`<${React.Fragment}>
+        <div className="chips" style=${{marginTop:12}}>${QREPLY.map(r=>html`<button key=${r} className=${'chip'+(pick[q.id]===r?' on':'')} style=${{fontSize:13,padding:'8px 12px'}} onClick=${()=>setPick({...pick,[q.id]:r})}>${r}</button>`)}</div>
+        <div style=${{display:'flex',gap:8,marginTop:10}}><button className="btn sm green" style=${{flex:1}} disabled=${!pick[q.id]} onClick=${()=>act.queryReply(q.id,pick[q.id])}>Send reply</button><button className="btn sm ghost" onClick=${()=>act.queryClose(q.id)}>Close</button></div>
+      </${React.Fragment}>`:null}
+    </div>`)}</div>`:html`<div className="empty">Nothing here.</div>`}
+    <a className="btn sm ghost" href="#query" style=${{textDecoration:'none',alignSelf:'flex-start'}}><${Icon} n="arrow" s=${12}/>Open the website query form</a>
   </div>`;
 }
+function StaffInventory({st,act,openModal}){
+  const [f,setF]=useState('All');
+  const items=st.inventory.filter(i=>i.centre===st.centre);
+  const shown=items.filter(i=>f==='All'||(f==='Out of stock'?!i.inStock:f==='To procure'?i.procure:i.inStock));
+  const reg=st.register.filter(r=>r.centre===st.centre).slice(0,8);
+  const c={in:items.filter(i=>i.inStock).length,out:items.filter(i=>!i.inStock).length,pro:items.filter(i=>i.procure).length};
+  return html`<${React.Fragment}>
+    <div className="eyebrow">Inventory · ${st.centre} <button className="btn sm" onClick=${()=>openModal({type:'inout'})}><${Icon} n="plus" s=${12} w=${3}/>Inward / outward</button></div>
+    <div className="kpis" style=${{gridTemplateColumns:'1fr 1fr 1fr'}}>
+      <div className="kpi" style=${{background:'var(--mint)',color:'var(--ink)'}}><small>In stock</small><b>${c.in}</b></div>
+      <div className="kpi" style=${{background:'var(--peach)',color:'var(--ink)'}}><small>Out of stock</small><b>${c.out}</b></div>
+      <div className="kpi" style=${{background:'#FBE3E2',color:'var(--ink)'}}><small>To procure</small><b>${c.pro}</b></div>
+    </div>
+    <div className="seg" style=${{marginTop:0}}>${['All','In stock','Out of stock','To procure'].map(x=>html`<button key=${x} className=${f===x?'on r':''} onClick=${()=>setF(x)}>${x}</button>`)}</div>
+    <div className="list">${shown.map(i=>html`<div key=${i.id} className="card">
+      <div className="row" style=${{alignItems:'center'}}>
+        ${i.procure?html`<span className="reddot" title="To procure again" aria-label="To procure again"></span>`:html`<span className="greendot" aria-hidden="true"></span>`}
+        <div className="grow"><div className="t">${i.name}</div><div className="s">${i.qty} ${i.unit} · ${i.inStock?'In stock':'Out of stock'}${i.procure?' · to procure again':''}</div></div>
+        <button className=${'badge '+(i.inStock?'b-resolved':'b-open')} onClick=${()=>act.invToggleStock(i.id)} title="Tap to change">${i.inStock?'Available':'Not available'}</button>
+      </div>
+      <div style=${{display:'flex',gap:8,marginTop:10,flexWrap:'wrap'}}>
+        <button className=${'btn sm '+(i.procure?'green':'redo')} onClick=${()=>act.invToggleProcure(i.id)}>${i.procure?html`<${React.Fragment}><${Icon} n="check" s=${12} w=${3}/>Mark procured</${React.Fragment}>`:'Mark to procure'}</button>
+        ${i.procure&&!st.needs.some(n=>n.fromItem===i.id)?html`<button className="btn sm ghost" onClick=${()=>act.invPostNeed(i.id)}><${Icon} n="heart" s=${12}/>Ask donors</button>`:null}
+        ${i.procure&&st.needs.some(n=>n.fromItem===i.id)?html`<span className="s" style=${{marginTop:0,alignSelf:'center'}}>Posted to donors</span>`:null}
+      </div>
+    </div>`)}</div>
+    ${!shown.length?html`<div className="empty">No items in this view.</div>`:null}
+    <div className="note">Red dot = item still has to be procured again. It clears when you mark it procured or log an inward entry.</div>
+    <div className="sec"><div className="eyebrow">Inward / outward register</div>
+      <div className="card" style=${{padding:'4px 16px'}}>${reg.length?reg.map(r=>html`<div key=${r.id} style=${{display:'flex',gap:10,alignItems:'center',padding:'10px 0',borderBottom:'1px solid var(--line)',fontSize:14}}>
+        <span className=${'badge '+(r.dir==='in'?'b-resolved':'b-pending')}>${r.dir==='in'?'In':'Out'}</span>
+        <span style=${{flex:1,minWidth:0}}><b>${r.qty} ${r.unit}</b> ${r.item}${r.note?html`<span style=${{color:'var(--muted)'}}> · ${r.note}</span>`:null}</span>
+        <span style=${{color:'var(--muted)',fontSize:12.5,fontVariantNumeric:'tabular-nums',whiteSpace:'nowrap'}}>${r.date}</span></div>`):html`<div className="empty" style=${{border:0}}>No entries yet.</div>`}</div></div>
+  </${React.Fragment}>`;
+}
+function InOutSheet({st,onClose,onSubmit,onAdd}){
+  const items=st.inventory.filter(i=>i.centre===st.centre);
+  const [f,setF]=useState({id:items[0]?.id||'',dir:'in',qty:'',note:''});
+  const [nw,setNw]=useState({open:false,name:'',unit:'units'});
+  const it=items.find(i=>i.id===f.id);
+  return html`<${Sheet} title="Inward / outward entry" eyebrow=${st.centre} onClose=${onClose}>
+    <${Field} label="Direction"><div className="chips">
+      <button className=${'chip'+(f.dir==='in'?' on':'')} onClick=${()=>setF({...f,dir:'in'})}>Inward · received</button>
+      <button className=${'chip'+(f.dir==='out'?' on':'')} onClick=${()=>setF({...f,dir:'out'})}>Outward · given out</button></div></${Field}>
+    <${Field} label="Item"><div className="chips">${items.map(i=>html`<button key=${i.id} className=${'chip'+(f.id===i.id?' on':'')} onClick=${()=>setF({...f,id:i.id})}>${i.procure?html`<span className="reddot sm"></span>`:null}${i.name}</button>`)}
+      <button className="chip" onClick=${()=>setNw({...nw,open:!nw.open})}><${Icon} n="plus" s=${12}/>New item</button></div></${Field}>
+    ${nw.open?html`<div className="card" style=${{display:'flex',gap:8,flexDirection:'column'}}>
+      <input id="io-newname" className="inp" placeholder="Item name, e.g. Wheat flour" value=${nw.name} onChange=${e=>setNw({...nw,name:e.target.value})}/>
+      <input id="io-newunit" className="inp" placeholder="Unit, e.g. kg, packs" value=${nw.unit} onChange=${e=>setNw({...nw,unit:e.target.value})}/>
+      <button className="btn sm green" disabled=${!nw.name.trim()} onClick=${()=>{const id=onAdd(nw);setF({...f,id});setNw({open:false,name:'',unit:'units'})}}>Add item</button></div>`:null}
+    <${Field} label=${'Quantity'+(it?' ('+it.unit+')':'')}><input id="io-qty" className="inp" inputMode="numeric" placeholder="e.g. 20" value=${f.qty} onChange=${e=>setF({...f,qty:e.target.value.replace(/[^0-9]/g,'')})}/></${Field}>
+    ${f.dir==='out'&&it&&+f.qty>it.qty?html`<div className="note" style=${{color:'var(--warn)'}}>Only ${it.qty} ${it.unit} in stock.</div>`:null}
+    <${Field} label="Note (optional)"><input id="io-note" className="inp" placeholder=${f.dir==='in'?'e.g. Donated by Rotary Club':'e.g. Given to Room 4'} value=${f.note} onChange=${e=>setF({...f,note:e.target.value})}/></${Field}>
+    <button className="btn block" disabled=${!it||!(+f.qty>0)||(f.dir==='out'&&+f.qty>it.qty)} onClick=${()=>onSubmit(f)}><${Icon} n="check" s=${14}/>Save entry</button>
+  </${Sheet}>`;
+}
+function StaffRepairs({st,act,openModal}){
+  const [k,setK]=useState('All');
+  const list=st.maintenance.filter(m=>k==='All'||(m.kind||'Repair')===k);
+  return html`<div className="sec">
+    <div className="eyebrow">Repairs & complaints <button className="btn sm" onClick=${()=>openModal({type:'repair'})}><${Icon} n="plus" s=${12} w=${3}/>Log</button></div>
+    <div className="seg" style=${{marginTop:0}}>${['All','Repair','Complaint','Stock'].map(x=>html`<button key=${x} className=${k===x?'on r':''} onClick=${()=>setK(x)}>${x==='All'?'All':x+'s'}</button>`)}</div>
+    <div className="list">${list.map(m=>html`<div key=${m.id} className="card row">
+      <div className="prio" style=${{background:m.priority==='High'?'var(--red)':m.priority==='Medium'?'var(--orange)':'#7BB89A'}}></div>
+      <div className="grow"><div className="t">${m.title}</div><div className="s">${m.kind||'Repair'} · ${m.area} · ${m.priority} priority${m.source==='Night Care'?' · reported by a parent at night':''}</div>
+        <div className="seg">${[['Open','o'],['In Progress','ip'],['Resolved','r']].map(([s,c])=>html`<button key=${s} className=${(m.status===s?'on ':'')+c} onClick=${()=>act.setMaint(m.id,s)}>${s}</button>`)}</div></div>
+    </div>`)}</div>
+    ${!list.length?html`<div className="empty">Nothing logged here.</div>`:null}
+  </div>`;
+}
+function StaffNeeds({st,openModal}){
+  return html`<div className="sec"><div className="eyebrow">Needs for donors (${st.needs.length}) <button className="btn sm" onClick=${()=>openModal({type:'need'})}><${Icon} n="plus" s=${12} w=${3}/>Post a need</button></div>
+    <div className="note" style=${{color:'var(--warn)'}}>[NEEDS INPUT] Demo items. Replace them with the items St. Jude tracks in its own system.</div>
+    <div className="list">${st.needs.map(n=>html`<div key=${n.id} className="card">
+      <div className="row"><div className="grow"><div className="t">${n.title}</div><div className="s">${CAT[n.category]?.label||n.category}${n.fromItem?' · from inventory':''}</div></div>${urgSmall(n.urgency)}</div>
+      <div className="bar dk" style=${{margin:'10px 0 8px'}}><i style=${{width:pctOf(n)+'%'}}></i></div>
+      <div className="meta"><span>Progress: <b>${pctOf(n)}%</b> (${fmtAmt(n,n.raised)}/${fmtAmt(n,n.target)})</span><span>${n.location}</span></div>
+    </div>`)}</div></div>`;
+}
+function Polls({st,act,who,openModal}){
+  const list=st.polls.filter(p=>who==='Staff'?true:p.aud!=='Staff');
+  return html`<div className="sec">
+    <div className="eyebrow">Yes / No polls ${who==='Staff'?html`<button className="btn sm" onClick=${()=>openModal({type:'poll'})}><${Icon} n="plus" s=${12} w=${3}/>New poll</button>`:null}</div>
+    ${list.length?html`<div className="list">${list.map(p=>{const tot=p.yes+p.no;const yp=tot?Math.round(p.yes/tot*100):0;const mine=(p.votes||{})[who];return html`<div key=${p.id} className="card">
+      <div className="t">${p.q}</div><div className="s">For ${p.aud.toLowerCase()} · ${tot} ${tot===1?'answer':'answers'}</div>
+      <div style=${{display:'flex',gap:8,marginTop:12}}>
+        <button className=${'btn sm '+(mine==='yes'?'green':'ghost')} style=${{flex:1}} onClick=${()=>act.vote(p.id,'yes',who)} aria-pressed=${mine==='yes'}>Yes</button>
+        <button className=${'btn sm '+(mine==='no'?'green':'ghost')} style=${{flex:1}} onClick=${()=>act.vote(p.id,'no',who)} aria-pressed=${mine==='no'}>No</button></div>
+      <div className="bar g dk" style=${{marginTop:12}}><i style=${{width:yp+'%'}}></i></div>
+      <div className="meta" style=${{marginTop:6}}><span>Yes ${p.yes}</span><span>No ${p.no}</span></div>
+    </div>`})}</div>`:html`<div className="empty">No polls yet.</div>`}
+  </div>`;
+}
+function PollSheet({onClose,onSubmit}){
+  const [f,setF]=useState({q:'',aud:'Volunteers'});
+  return html`<${Sheet} title="New yes / no poll" eyebrow="Staff" onClose=${onClose}>
+    <${Field} label="Question"><input id="p-q" className="inp" placeholder="e.g. Can you help with Sunday's ration sorting?" value=${f.q} onChange=${e=>setF({...f,q:e.target.value})}/></${Field}>
+    <${Field} label="Who should answer?"><div className="chips">${['Volunteers','Staff','Everyone'].map(a=>html`<button key=${a} className=${'chip'+(f.aud===a?' on':'')} onClick=${()=>setF({...f,aud:a})}>${a}</button>`)}</div></${Field}>
+    <button className="btn block" disabled=${!f.q.trim()} onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${14}/>Send poll</button>
+  </${Sheet}>`;
+}
+const REC_CATS=['All','Donations','Volunteers','Families','Inventory','Queries','Repairs','Night','Polls'];
+function Records({st}){
+  const [q,setQ]=useState('');const [c,setC]=useState('All');
+  const ql=q.trim().toLowerCase();
+  const list=st.activity.filter(a=>(c==='All'||a.cat===c)&&(!ql||(a.text+' '+a.who+' '+a.date).toLowerCase().includes(ql)));
+  const days=[];list.forEach(a=>{let d=days.find(x=>x.date===a.date);if(!d){d={date:a.date,items:[]};days.push(d)}d.items.push(a)});
+  return html`<div className="sec">
+    <div className="eyebrow">Records · all past activity</div>
+    <input id="rec-q" className="inp" type="search" placeholder="Search a name, item or date" value=${q} onChange=${e=>setQ(e.target.value)}/>
+    <div className="hscroll"><div className="chips" style=${{flexWrap:'nowrap'}}>${REC_CATS.map(x=>html`<button key=${x} className=${'chip'+(c===x?' on':'')} style=${{whiteSpace:'nowrap'}} onClick=${()=>setC(x)}>${x}</button>`)}</div></div>
+    ${days.length?days.map(d=>html`<div key=${d.date} className="card" style=${{padding:'6px 16px'}}>
+      <div className="s" style=${{fontWeight:800,color:'var(--text)',padding:'8px 0 4px'}}>${d.date===today()?'Today':d.date}</div>
+      ${d.items.map(a=>html`<div key=${a.id} style=${{display:'flex',gap:12,padding:'9px 0',borderTop:'1px solid var(--line)',fontSize:14}}>
+        <span style=${{fontVariantNumeric:'tabular-nums',color:'var(--muted)',fontWeight:800,minWidth:66}}>${a.time}</span>
+        <span style=${{flex:1,minWidth:0}}>${a.text}<span style=${{color:'var(--muted)'}}> · ${a.who}</span><br/><span className="badge b-normal" style=${{marginTop:4}}>${a.cat}</span></span></div>`)}
+    </div>`):html`<div className="empty">No records match.</div>`}
+  </div>`;
+}
+
 function NeedSheet({onClose,onSubmit}){
   const [f,setF]=useState({title:'',category:'nutrition',urgency:'high',target:'',location:'',desc:''});
   return html`<${Sheet} title="Post a need" eyebrow="Staff" onClose=${onClose}>
@@ -565,22 +825,47 @@ function NeedSheet({onClose,onSubmit}){
   </${Sheet}>`;
 }
 function RepairSheet({onClose,onSubmit}){
-  const [f,setF]=useState({title:'',area:'',priority:'Medium'});
-  return html`<${Sheet} title="Log a repair" eyebrow="Facilities" onClose=${onClose}>
+  const [f,setF]=useState({title:'',area:'',priority:'Medium',kind:'Repair'});
+  return html`<${Sheet} title="Log a repair or complaint" eyebrow="Facilities" onClose=${onClose}>
+    <${Field} label="Type"><div className="chips">${['Repair','Complaint','Stock'].map(k=>html`<button key=${k} className=${'chip'+(f.kind===k?' on':'')} onClick=${()=>setF({...f,kind:k})}>${k==='Stock'?'Stock issue':k}</button>`)}</div></${Field}>
     <${Field} label="What needs fixing?"><input id="r-title" className="inp" placeholder="e.g. Leaking tap in washroom" value=${f.title} onChange=${e=>setF({...f,title:e.target.value})}/></${Field}>
     <${Field} label="Location"><input id="r-area" className="inp" placeholder="e.g. Wing A, Room 6" value=${f.area} onChange=${e=>setF({...f,area:e.target.value})}/></${Field}>
     <${Field} label="Priority"><div className="chips">${['High','Medium','Low'].map(p=>html`<button key=${p} className=${'chip'+(f.priority===p?' on':'')} onClick=${()=>setF({...f,priority:p})}><span style=${{width:8,height:8,borderRadius:8,background:p==='High'?'var(--red)':p==='Medium'?'var(--orange)':'#7BB89A'}}></span>${p}</button>`)}</div></${Field}>
-    <button className="btn block" disabled=${!f.title.trim()} onClick=${()=>onSubmit(f)}><${Icon} n="wrench" s=${14}/>Add to repair log</button>
+    <button className="btn block" disabled=${!f.title.trim()} onClick=${()=>onSubmit(f)}><${Icon} n="wrench" s=${14}/>Add to the log</button>
   </${Sheet}>`;
 }
 
 /* ---------------- Parent ---------------- */
 const AID={'Grocery Aid':'box','School Supplies':'book','Hygiene Kit':'sparkles','Baby Formula':'baby'};
-function Parent({st,openModal}){
+const AID_HI={'Grocery Aid':['Groceries','राशन'],'School Supplies':['School things','स्कूल का सामान'],'Hygiene Kit':['Soap & hygiene','सफ़ाई का सामान'],'Baby Formula':['Baby milk','बच्चे का दूध']};
+const STATUS_HI={Pending:['Waiting','इंतज़ार में'],Approved:['Approved','मंज़ूर'],Ready:['Ready to collect','लेने के लिए तैयार']};
+function Parent({st,act,openModal}){
+  const simple=st.parentSimple!==false;
   const active=st.familyRequests.filter(r=>r.status!=='Collected');
   const acts=st.workshops.filter(w=>w.status==='approved').sort((a,b)=>a.when.localeCompare(b.when));
   const badge=r=>r.status==='Ready'?html`<span className="badge b-ready">Ready for pickup</span>`:r.status==='Approved'?html`<span className="badge b-approved">Approved</span>`:html`<span className="badge b-pending">Pending</span>`;
+  const toggle=html`<div className="seg" style=${{marginTop:0}} role="radiogroup" aria-label="View">
+    <button className=${simple?'on r':''} onClick=${()=>act.setParentSimple(true)} aria-pressed=${simple}>Simple · आसान</button>
+    <button className=${!simple?'on r':''} onClick=${()=>act.setParentSimple(false)} aria-pressed=${!simple}>Detailed</button></div>`;
+  if(simple) return html`<div className="body">
+    ${toggle}
+    <div className="sec"><div className="eyebrow">What do you need? · क्या चाहिए?</div>
+      <div className="bigtiles">${Object.keys(AID).map(t=>html`<button key=${t} className="bigtile" onClick=${()=>openModal({type:'aid',preset:t})}>
+        <span className="ico"><${Icon} n=${AID[t]} s=${26}/></span><b>${AID_HI[t][0]}</b><span lang="hi">${AID_HI[t][1]}</span></button>`)}</div></div>
+    <button className="bigtile wide" onClick=${()=>openModal({type:'callme'})}>
+      <span className="ico p"><${Icon} n="phone" s=${24}/></span><span style=${{textAlign:'left'}}><b>Ask staff to call me</b><span lang="hi">स्टाफ़ से बात करें</span></span></button>
+    <div className="sec"><div className="eyebrow">My requests · मेरी माँगें</div>
+      ${active.length?html`<div className="list">${active.map(r=>{const sh=STATUS_HI[r.status]||[r.status,''];return html`<div key=${r.id} className="card row" style=${{alignItems:'center'}}>
+        <div className=${'ico'+(r.status==='Ready'?'':' p')} style=${{width:48,height:48}}><${Icon} n=${AID[r.type]||'box'} s=${22}/></div>
+        <div className="grow"><div className="t" style=${{fontSize:16}}>${(AID_HI[r.type]||[r.type])[0]}</div>
+          <div style=${{fontSize:15,fontWeight:800,color:r.status==='Ready'?'#2f9e6a':'var(--warn)'}}>${sh[0]}${r.status==='Ready'?' · '+(r.room||'Room 2'):''}</div>
+          <div lang="hi" className="s" style=${{marginTop:1}}>${sh[1]}${r.status==='Ready'?' · कमरा 2':''}</div></div></div>`})}</div>`
+        :html`<div className="empty">No requests yet. Tap a picture above. · ऊपर तस्वीर दबाएँ।</div>`}
+    </div>
+    <div className="note">Finding the phone hard? Ask at the centre desk. Staff can raise any request for you. · फ़ोन मुश्किल लगे तो डेस्क पर पूछें।</div>
+  </div>`;
   return html`<div className="body">
+    ${toggle}
     <div className="eyebrow">Parent & family hub <button className="btn sm" onClick=${()=>openModal({type:'aid'})}><${Icon} n="send" s=${12}/>Request aid</button></div>
     <div className="mintcard" style=${{padding:16}}>
       <div style=${{display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:10,borderBottom:'1px solid rgba(11,46,31,.1)'}}><span style=${{fontSize:16,fontWeight:800}}>My active requests</span><b style=${{fontWeight:800,fontSize:18}}>${active.length} Active</b></div>
@@ -606,14 +891,56 @@ function Parent({st,openModal}){
     </div>
   </div>`;
 }
-function AidSheet({onClose,onSubmit}){
-  const [f,setF]=useState({type:'Grocery Aid',recipient:''});
-  return html`<${Sheet} title="Request aid" eyebrow="Parent desk" onClose=${onClose}>
-    <div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>${Object.keys(AID).map(t=>html`<button key=${t} className=${'chip'+(f.type===t?' on':'')} style=${{borderRadius:16,flexDirection:'column',padding:'14px 8px',justifyContent:'center'}} onClick=${()=>setF({...f,type:t})}><${Icon} n=${AID[t]} s=${20}/>${t}</button>`)}</div>
-    <${Field} label="For (child's name)"><input id="a-for" className="inp" placeholder="e.g. Rohan Sharma" value=${f.recipient} onChange=${e=>setF({...f,recipient:e.target.value})}/></${Field}>
-    <div className="note">Staff review requests the same day. You'll see the status change here, and the pickup room once it's ready.</div>
-    <button className="btn block" onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${14}/>Send request</button>
+function AidSheet({st,onClose,onSubmit,preset,byStaff}){
+  const [f,setF]=useState({type:preset||'Grocery Aid',recipient:byStaff?'':(st.children[1]||''),by:byStaff?'Staff':'Parent'});
+  return html`<${Sheet} title=${byStaff?'Request for a parent':'Request aid · माँग भेजें'} eyebrow=${byStaff?'Staff desk':'Parent desk'} onClose=${onClose}>
+    <div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>${Object.keys(AID).map(t=>html`<button key=${t} className=${'chip'+(f.type===t?' on':'')} style=${{borderRadius:16,flexDirection:'column',padding:'14px 8px',justifyContent:'center'}} onClick=${()=>setF({...f,type:t})}><${Icon} n=${AID[t]} s=${22}/>${AID_HI[t][0]}<span lang="hi" style=${{fontSize:12.5,opacity:.85}}>${AID_HI[t][1]}</span></button>`)}</div>
+    ${byStaff?html`<${Field} label="Parent or child's name"><input id="a-for" className="inp" placeholder="e.g. Rohan Sharma" value=${f.recipient} onChange=${e=>setF({...f,recipient:e.target.value})}/></${Field}>`
+      :html`<${Field} label="For which child? · किसके लिए?"><div className="chips">${st.children.map(c=>html`<button key=${c} className=${'chip'+(f.recipient===c?' on':'')} onClick=${()=>setF({...f,recipient:c})}>${c}</button>`)}</div></${Field}>`}
+    <button className="btn block" style=${{padding:16,fontSize:16}} disabled=${!f.recipient.trim()} onClick=${()=>onSubmit(f)}><${Icon} n="send" s=${16}/>${byStaff?'Raise request':'Send · भेजें'}</button>
   </${Sheet}>`;
+}
+function CallMeSheet({st,onClose,onSubmit}){
+  const [f,setF]=useState({topic:'Other'});
+  const T=[['Treatment or hospital','इलाज या अस्पताल'],['Room or facilities','कमरा या सुविधा'],['Food or supplies','खाना या सामान'],['Other','कुछ और']];
+  return html`<${Sheet} title="Ask staff to call me" eyebrow="स्टाफ़ से बात करें" onClose=${onClose}>
+    <${Field} label="About what? · किस बारे में?"><div style=${{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>${T.map(([en,hi])=>html`<button key=${en} className=${'chip'+(f.topic===en?' on':'')} style=${{borderRadius:14,flexDirection:'column',padding:'12px 6px'}} onClick=${()=>setF({topic:en})}>${en}<span lang="hi" style=${{fontSize:12.5,opacity:.85}}>${hi}</span></button>`)}</div></${Field}>
+    <div className="note">Staff will call you back during office hours, 10 AM – 6 PM. For an emergency at night, use Night Care or call 108. · रात में इमरजेंसी हो तो 108 पर कॉल करें।</div>
+    <button className="btn block" style=${{padding:16,fontSize:16}} onClick=${()=>onSubmit(f)}><${Icon} n="phone" s=${16}/>Request a call · कॉल माँगें</button>
+  </${Sheet}>`;
+}
+
+/* ---------------- Website query page (no app download needed) ---------------- */
+function WebQuery(){
+  const [f,setF]=useState({name:'',contact:'',type:'Donation',centre:'',msg:''});
+  const [done,setDone]=useState(false);
+  const centres=(load().centres)||[];
+  const send=e=>{e.preventDefault();const s=load();
+    s.queries.unshift({id:uid(),name:f.name.trim(),contact:f.contact.trim(),type:f.type,centre:f.centre,msg:f.msg.trim(),source:'Website',status:'New',date:today()});
+    s.activity.unshift({id:uid(),date:today(),time:nowTime(),cat:'Queries',text:'Website query from '+f.name.trim()+' ('+f.type+')',who:'Website'});
+    save(s);setDone(true)};
+  const ok=f.name.trim()&&f.contact.trim()&&f.msg.trim();
+  return html`<div className="webwrap"><div className="app web">
+    <header className="webhdr"><div className="logo"><img src=${LOGO} alt=""/></div><div className="brand"><b>Sahaay</b><small>Care System</small></div>
+      <a className="btn sm ghost" href="#" style=${{textDecoration:'none',color:'#EAF4EE',borderColor:'rgba(255,255,255,.3)'}}>Open the app</a></header>
+    <main className="webmain">
+      ${done?html`<div className="card" style=${{display:'flex',flexDirection:'column',gap:10,alignItems:'flex-start'}}>
+        <div className="ico" style=${{width:52,height:52,borderRadius:16}}><${Icon} n="check" s=${26} w=${3}/></div>
+        <h1 className="webh1">Thank you, ${f.name.split(' ')[0]}. We've received your query.</h1>
+        <p className="note" style=${{fontSize:15}}>Our team will reply during office hours, 10 AM – 6 PM. Your query goes straight to the staff inbox in the Sahaay app.</p>
+        <div style=${{display:'flex',gap:8,flexWrap:'wrap'}}><button className="btn green" onClick=${()=>{setDone(false);setF({...f,msg:''})}}>Send another query</button><a className="btn ghost" href="#" style=${{textDecoration:'none'}}>See it in the app</a></div></div>`
+      :html`<form className="card" onSubmit=${send} style=${{display:'flex',flexDirection:'column',gap:16}}>
+        <div><div className="eyebrow" style=${{color:'var(--warn)',fontSize:13}}>No app needed</div><h1 className="webh1">Send us a query</h1>
+          <p className="note" style=${{fontSize:15,margin:'6px 0 0'}}>Want to donate, volunteer, visit or ask something? Write to us here. It reaches the same team and the same system as the Sahaay app.</p></div>
+        <${Field} label="Your name"><input id="wq-name" className="inp" autoComplete="name" value=${f.name} onChange=${e=>setF({...f,name:e.target.value})} required/></${Field}>
+        <${Field} label="Phone or email"><input id="wq-contact" className="inp" autoComplete="email" value=${f.contact} onChange=${e=>setF({...f,contact:e.target.value})} required/></${Field}>
+        <${Field} label="I want to"><div className="chips">${['Donation','Volunteering','Visit','Parent support','Other'].map(t=>html`<button type="button" key=${t} className=${'chip'+(f.type===t?' on':'')} onClick=${()=>setF({...f,type:t})}>${t==='Donation'?'Donate':t==='Volunteering'?'Volunteer':t==='Visit'?'Visit a centre':t}</button>`)}</div></${Field}>
+        ${centres.length?html`<${Field} label="Centre (optional)"><div className="chips">${centres.map(c=>html`<button type="button" key=${c} className=${'chip'+(f.centre===c?' on':'')} onClick=${()=>setF({...f,centre:f.centre===c?'':c})}>${c}</button>`)}</div></${Field}>`:null}
+        <${Field} label="Your message"><textarea id="wq-msg" className="inp" style=${{minHeight:110}} placeholder="e.g. I'd like to donate 20 blankets this month." value=${f.msg} onChange=${e=>setF({...f,msg:e.target.value})} required></textarea></${Field}>
+        <button className="btn block" type="submit" disabled=${!ok}><${Icon} n="send" s=${14}/>Send query</button>
+        <p className="note" style=${{margin:0}}>Prototype: in this demo, queries are saved in this browser. A live version would store them in St. Jude's own database.</p>
+      </form>`}
+    </main></div></div>`;
 }
 
 /* ---------------- Night Care (parents, 6 PM – 10 AM, no staff on site) ---------------- */
@@ -781,6 +1108,8 @@ function App(){
   const [toast,setToast]=useState(null);
   const [clock,setClock]=useState(()=>new Date());
   const [confirmReset,setConfirmReset]=useState(false);
+  const [unlocked,setUnlocked]=useState(false);
+  useEffect(()=>{const f=e=>{if(e.key===KEY)setSt(load())};window.addEventListener('storage',f);return()=>window.removeEventListener('storage',f)},[]);
   const scrollRef=useRef(null);
   useEffect(()=>save(st),[st]);
   useEffect(()=>{const t=setInterval(()=>setClock(new Date()),20000);return()=>clearInterval(t)},[]);
@@ -790,21 +1119,36 @@ function App(){
   const low=st.isLowLight===null?(st.role==='night'||isNightHour()):st.isLowLight;
   const setRole=r=>{up(s=>{s.role=r;if(r==='night'&&s.isLowLight===false)s.isLowLight=null});setMenu(false);scrollRef.current&&scrollRef.current.scrollTo({top:0})};
 
+  const L=(s,cat,text,who)=>{s.activity.unshift({id:uid(),date:today(),time:nowTime(),cat,text,who});if(s.activity.length>300)s.activity.length=300};
   const act={
-    donate(id,amt,units,name){up(s=>{const n=s.needs.find(x=>x.id===id);n.raised=Math.min(n.target,n.raised+units);s.donations.unshift({id:uid(),name,amount:amt,need:n.title,ago:'Just now'})});setModal(null);say(`Thank you! $${amt} added to ${st.needs.find(x=>x.id===id).title}.`)},
-    applyVolunteer(f){up(s=>{const me={id:'me',...f,name:f.name.trim(),status:'pending',hours:18.5};s.myVolunteerProfile=me;s.volunteers=s.volunteers.filter(v=>v.id!=='me');s.volunteers.unshift({...me})});say('Application sent to staff for verification.')},
-    reviewVolunteer(id,status){up(s=>{const v=s.volunteers.find(x=>x.id===id);v.status=status;if(id==='me'&&s.myVolunteerProfile)s.myVolunteerProfile.status=status});say(status==='approved'?'Volunteer approved. Their dashboard is now unlocked.':'Application declined.')},
-    proposeWorkshop(f){up(s=>{s.workshops.push({id:uid(),...f,title:f.title.trim(),by:s.myVolunteerProfile?.name||'Volunteer',status:'pending',mine:true})});setModal(null);say('Workshop sent to staff for review.')},
-    reviewWorkshop(id,status){up(s=>{s.workshops.find(x=>x.id===id).status=status});say(status==='approved'?'Workshop approved. Parents can now see it.':'Workshop rejected.')},
-    setMaint(id,status){up(s=>{s.maintenance.find(x=>x.id===id).status=status})},
-    addRepair(f){up(s=>{s.maintenance.unshift({id:uid(),title:f.title.trim(),area:f.area.trim()||'Campus',priority:f.priority,status:'Open',source:'Staff'})});setModal(null);say('Repair added to the log.')},
-    postNeed(f){up(s=>{s.needs.unshift({id:uid(),title:f.title.trim(),category:f.category,urgency:f.urgency,unit:'usd',unitCost:1,raised:0,target:+f.target,location:f.location.trim()||'Main campus',desc:f.desc.trim()||'Newly posted by staff.'})});setModal(null);say('Need published to contributors.')},
-    requestAid(f){up(s=>{s.familyRequests.unshift({id:uid(),type:f.type,recipient:f.recipient.trim()||'Family Support',date:today(),status:'Pending'})});setModal(null);say('Request sent to the Parent Desk.')},
-    setFamily(id,status){up(s=>{const r=s.familyRequests.find(x=>x.id===id);r.status=status;if(status==='Ready')r.room='Room 2'});say(status==='Ready'?'Family notified: ready for pickup in Room 2.':'Request approved.')},
-    raiseAlert(f){const is=issueOf(f.issue);const t=nowTime();up(s=>{s.alerts.unshift({id:uid(),issue:f.issue,child:f.child,place:f.place,urgency:f.urgency,note:f.note.trim(),time:t,status:'sent'});s.nightLogs.unshift({id:uid(),time:t,text:'Alert raised: '+is.label+(f.child?' · '+f.child:'')+(f.place?' · '+f.place:''),who:'Parent'});if(is.kind==='facility')s.maintenance.unshift({id:uid(),title:f.note.trim()||is.label,area:f.place||'Campus',priority:f.urgency==='urgent'?'High':'Medium',status:'Open',source:'Night Care'})});setModal(null);say(is.kind==='facility'?'Alert sent. Also added to the morning repair list.':'Alert sent to on-call staff.')},
-    alertReply(id,text){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.reply=text;a.replyTime=t;if(a.status==='sent')a.status='seen';s.nightLogs.unshift({id:uid(),time:t,text:'Replied: "'+text+'"',who:'On-call staff'})});say('Reply sent to the parent.')},
-    alertStatus(id,status,logText){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.status=status;if(status==='escalated'&&!a.reply){a.reply='Help is being arranged. Stay with your child and keep your phone close.';a.replyTime=t}s.nightLogs.unshift({id:uid(),time:t,text:logText+' ('+issueOf(a.issue).label+(a.child?', '+a.child:'')+')',who:status==='resolved'&&logText.startsWith('Parent')?'Parent':'On-call staff'})});say(status==='resolved'?'Alert closed.':'Help arranged. The parent can see it.')},
-    addHandover(h){up(s=>{s.handover.push({id:uid(),child:h.child,risk:h.risk,note:h.note.trim()})});say('Care note added for tonight.')},
+    donate(id,amt,units,name){up(s=>{const n=s.needs.find(x=>x.id===id);n.raised=Math.min(n.target,n.raised+units);s.donations.unshift({id:uid(),name,amount:amt,need:n.title,ago:'Just now'});L(s,'Donations',name+' gave $'+amt+' to '+n.title,'Contributor')});setModal(null);say(`Thank you! $${amt} added to ${st.needs.find(x=>x.id===id).title}.`)},
+    applyVolunteer(f){up(s=>{const me={id:'me',...f,name:f.name.trim(),status:'pending',hours:18.5};s.myVolunteerProfile=me;s.volunteers=s.volunteers.filter(v=>v.id!=='me');s.volunteers.unshift({...me});L(s,'Volunteers','Volunteer application from '+me.name,'Volunteer')});say('Application sent to staff for verification.')},
+    reviewVolunteer(id,status){up(s=>{const v=s.volunteers.find(x=>x.id===id);v.status=status;if(id==='me'&&s.myVolunteerProfile)s.myVolunteerProfile.status=status;L(s,'Volunteers',v.name+(status==='approved'?' approved as a volunteer':' application declined'),'Staff')});say(status==='approved'?'Volunteer approved. Their dashboard is now unlocked.':'Application declined.')},
+    proposeWorkshop(f){up(s=>{const by=s.myVolunteerProfile?.name||'Volunteer';s.workshops.push({id:uid(),...f,title:f.title.trim(),by,status:'pending',mine:true});L(s,'Volunteers','Workshop proposed: '+f.title.trim()+' ('+by+')','Volunteer')});setModal(null);say('Workshop sent to staff for review.')},
+    reviewWorkshop(id,status){up(s=>{const w=s.workshops.find(x=>x.id===id);w.status=status;L(s,'Volunteers','Workshop '+status+': '+w.title+' ('+w.by+')','Staff')});say(status==='approved'?'Workshop approved. Parents can now see it.':'Workshop rejected.')},
+    setMaint(id,status){up(s=>{const m=s.maintenance.find(x=>x.id===id);if(m.status!==status)L(s,'Repairs',(m.kind||'Repair')+' "'+m.title+'" marked '+status,'Staff');m.status=status})},
+    addRepair(f){up(s=>{s.maintenance.unshift({id:uid(),title:f.title.trim(),area:f.area.trim()||s.centre,priority:f.priority,status:'Open',source:'Staff',kind:f.kind||'Repair'});L(s,'Repairs',(f.kind||'Repair')+' logged: '+f.title.trim(),'Staff')});setModal(null);say('Added to the log.')},
+    postNeed(f){up(s=>{s.needs.unshift({id:uid(),title:f.title.trim(),category:f.category,urgency:f.urgency,unit:'usd',unitCost:1,raised:0,target:+f.target,location:f.location.trim()||s.centre,desc:f.desc.trim()||'Newly posted by staff.'});L(s,'Donations','Need posted for donors: '+f.title.trim(),'Staff')});setModal(null);say('Need published to contributors.')},
+    requestAid(f){up(s=>{const who=f.recipient.trim()||'Family';s.familyRequests.unshift({id:uid(),type:f.type,recipient:who,date:today(),status:'Pending',by:f.by||'Parent'});L(s,'Families',f.type+' requested for '+who+(f.by==='Staff'?' (raised by staff)':''),f.by||'Parent')});setModal(null);say(f.by==='Staff'?'Request raised for the parent.':'Request sent. · माँग भेज दी गई।')},
+    callMe(f){up(s=>{s.queries.unshift({id:uid(),name:'Parent (app)',contact:'',type:'Call back',centre:s.centre,msg:'Please call me about: '+f.topic.toLowerCase()+'.',source:'App (parent)',status:'New',date:today()});L(s,'Queries','Parent asked for a call back ('+f.topic+')','Parent')});setModal(null);say('Staff will call you back. · स्टाफ़ आपको कॉल करेगा।')},
+    setFamily(id,status){up(s=>{const r=s.familyRequests.find(x=>x.id===id);r.status=status;if(status==='Ready')r.room='Room 2';L(s,'Families',r.type+' for '+r.recipient+(status==='Ready'?' ready for pickup in Room 2':' approved'),'Staff')});say(status==='Ready'?'Family notified: ready for pickup in Room 2.':'Request approved.')},
+    setParentSimple(v){up(s=>{s.parentSimple=v})},
+    setCentre(c){up(s=>{s.centre=c})},
+    invMove(f){up(s=>{const i=s.inventory.find(x=>x.id===f.id);const q=+f.qty;if(f.dir==='in'){i.qty+=q;i.inStock=true;i.procure=false}else{i.qty=Math.max(0,i.qty-q);if(i.qty===0)i.inStock=false}
+      s.register.unshift({id:uid(),dir:f.dir,item:i.name,qty:q,unit:i.unit,centre:i.centre,date:today(),note:f.note.trim()});
+      L(s,'Inventory',(f.dir==='in'?'Inward: ':'Outward: ')+q+' '+i.unit+' '+i.name+' at '+i.centre+(f.note.trim()?' ('+f.note.trim()+')':''),'Staff')});setModal(null);say('Entry saved to the register.')},
+    invAdd(n){const id='i'+uid();up(s=>{s.inventory.push({id,name:n.name.trim(),unit:n.unit.trim()||'units',qty:0,inStock:false,procure:false,centre:s.centre});L(s,'Inventory','New item added: '+n.name.trim()+' at '+s.centre,'Staff')});return id},
+    invToggleStock(id){up(s=>{const i=s.inventory.find(x=>x.id===id);i.inStock=!i.inStock;L(s,'Inventory',i.name+' marked '+(i.inStock?'available':'not available')+' at '+i.centre,'Staff')})},
+    invToggleProcure(id){up(s=>{const i=s.inventory.find(x=>x.id===id);i.procure=!i.procure;L(s,'Inventory',i.name+(i.procure?' marked to procure again':' procured')+' at '+i.centre,'Staff')});say('Inventory updated.')},
+    invPostNeed(id){up(s=>{const i=s.inventory.find(x=>x.id===id);s.needs.unshift({id:uid(),fromItem:id,title:i.name+' restock',category:/soap|pad|hygiene/i.test(i.name)?'hygiene':/ors|medic/i.test(i.name)?'medical':/note|book/i.test(i.name)?'education':'nutrition',urgency:'high',unit:'usd',unitCost:1,raised:0,target:500,location:i.centre,desc:i.centre+' needs to restock '+i.name.toLowerCase()+'. Posted from the inventory register.'});L(s,'Donations','Asked donors for '+i.name+' ('+i.centre+')','Staff')});say('Posted to contributors.')},
+    queryReply(id,text){up(s=>{const q=s.queries.find(x=>x.id===id);q.reply=text;q.status='Replied';L(s,'Queries','Replied to '+q.name+' ('+q.type+')','Staff')});say('Reply sent.')},
+    queryClose(id){up(s=>{const q=s.queries.find(x=>x.id===id);q.status='Closed';L(s,'Queries','Closed query from '+q.name,'Staff')})},
+    addPoll(f){up(s=>{s.polls.unshift({id:uid(),q:f.q.trim(),aud:f.aud,yes:0,no:0,votes:{}});L(s,'Polls','Poll sent to '+f.aud.toLowerCase()+': '+f.q.trim(),'Staff')});setModal(null);say('Poll sent.')},
+    vote(id,choice,who){up(s=>{const p=s.polls.find(x=>x.id===id);p.votes=p.votes||{};const prev=p.votes[who];if(prev===choice)return;if(prev)p[prev]--;p[choice]++;p.votes[who]=choice;L(s,'Polls',who+' answered '+choice+': '+p.q,who)})},
+    raiseAlert(f){const is=issueOf(f.issue);const t=nowTime();up(s=>{s.alerts.unshift({id:uid(),issue:f.issue,child:f.child,place:f.place,urgency:f.urgency,note:f.note.trim(),time:t,status:'sent'});s.nightLogs.unshift({id:uid(),time:t,text:'Alert raised: '+is.label+(f.child?' · '+f.child:'')+(f.place?' · '+f.place:''),who:'Parent'});L(s,'Night','Alert raised: '+is.label+(f.child?' · '+f.child:''),'Parent');if(is.kind==='facility')s.maintenance.unshift({id:uid(),title:f.note.trim()||is.label,area:f.place||'Campus',priority:f.urgency==='urgent'?'High':'Medium',status:'Open',source:'Night Care',kind:'Repair'})});setModal(null);say(is.kind==='facility'?'Alert sent. Also added to the morning repair list.':'Alert sent to on-call staff.')},
+    alertReply(id,text){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.reply=text;a.replyTime=t;if(a.status==='sent')a.status='seen';s.nightLogs.unshift({id:uid(),time:t,text:'Replied: "'+text+'"',who:'On-call staff'});L(s,'Night','On-call staff replied: "'+text+'"','On-call staff')});say('Reply sent to the parent.')},
+    alertStatus(id,status,logText){const t=nowTime();up(s=>{const a=s.alerts.find(x=>x.id===id);a.status=status;if(status==='escalated'&&!a.reply){a.reply='Help is being arranged. Stay with your child and keep your phone close.';a.replyTime=t}const who=status==='resolved'&&logText.startsWith('Parent')?'Parent':'On-call staff';s.nightLogs.unshift({id:uid(),time:t,text:logText+' ('+issueOf(a.issue).label+(a.child?', '+a.child:'')+')',who});L(s,'Night',logText+' ('+issueOf(a.issue).label+')',who)});say(status==='resolved'?'Alert closed.':'Help arranged. The parent can see it.')},
+    addHandover(h){up(s=>{s.handover.push({id:uid(),child:h.child,risk:h.risk,note:h.note.trim()});L(s,'Night','Handover note for '+h.child+' ('+h.risk+' risk)','Staff')});say('Care note added for tonight.')},
     removeHandover(id){up(s=>{s.handover=s.handover.filter(x=>x.id!==id)})},
   };
   const reset=()=>{const s=SEED();setSt(s);setConfirmReset(false);setMenu(false);say('Demo data restored.')};
@@ -812,8 +1156,8 @@ function App(){
   const view={
     contributor:html`<${Contributor} st=${st} openDonate=${id=>setModal({type:'donate',id})}/>`,
     volunteer:html`<${Volunteer} st=${st} act=${act} setRole=${setRole} openWorkshop=${()=>setModal({type:'workshop'})}/>`,
-    staff:html`<${Staff} st=${st} act=${act} openModal=${setModal}/>`,
-    parent:html`<${Parent} st=${st} openModal=${setModal}/>`,
+    staff:html`<${Staff} st=${st} act=${act} openModal=${setModal} unlocked=${unlocked} unlock=${()=>{setUnlocked(true);say('Signed in to the staff side.')}} lock=${()=>setUnlocked(false)}/>`,
+    parent:html`<${Parent} st=${st} act=${act} openModal=${setModal}/>`,
     night:html`<${Night} st=${st} act=${act} openModal=${setModal}/>`,
   }[role.id];
   const t=clock.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s?[AP]M/,m=>' '+m.trim());
@@ -825,8 +1169,8 @@ function App(){
         <div className="scroll" ref=${scrollRef}>
           <header className="hdr">
             <div className="hdr-top">
-              <div className="logo">S</div>
-              <div className="brand"><b>Sahaay</b><small>Community Shield</small></div>
+              <div className="logo"><img src=${LOGO} alt=""/></div>
+              <div className="brand"><b>Sahaay</b><small>Care System</small></div>
               <button className=${'ibtn'+(low?' ':'')} onClick=${()=>up(s=>{s.isLowLight=!low})} aria-label=${low?'Switch to day mode':'Switch to low-light mode'} title=${low?'Day mode':'Low-light mode'}><${Icon} n=${low?'sun':'moon'} s=${16}/></button>
               <button className=${'ibtn'+(menu?' hot':'')} onClick=${()=>{setMenu(!menu);setConfirmReset(false)}} aria-label="Switch role" aria-expanded=${menu}><${Icon} n=${menu?'x':'menu'} s=${16}/></button>
             </div>
@@ -848,17 +1192,25 @@ function App(){
         ${modal?.type==='workshop'&&html`<${WorkshopSheet} onClose=${()=>setModal(null)} onSubmit=${act.proposeWorkshop}/>`}
         ${modal?.type==='need'&&html`<${NeedSheet} onClose=${()=>setModal(null)} onSubmit=${act.postNeed}/>`}
         ${modal?.type==='repair'&&html`<${RepairSheet} onClose=${()=>setModal(null)} onSubmit=${act.addRepair}/>`}
-        ${modal?.type==='aid'&&html`<${AidSheet} onClose=${()=>setModal(null)} onSubmit=${act.requestAid}/>`}
+        ${modal?.type==='aid'&&html`<${AidSheet} st=${st} preset=${modal.preset} byStaff=${modal.byStaff} onClose=${()=>setModal(null)} onSubmit=${act.requestAid}/>`}
+        ${modal?.type==='callme'&&html`<${CallMeSheet} st=${st} onClose=${()=>setModal(null)} onSubmit=${act.callMe}/>`}
+        ${modal?.type==='inout'&&html`<${InOutSheet} st=${st} onClose=${()=>setModal(null)} onSubmit=${act.invMove} onAdd=${act.invAdd}/>`}
+        ${modal?.type==='poll'&&html`<${PollSheet} onClose=${()=>setModal(null)} onSubmit=${act.addPoll}/>`}
         ${modal?.type==='alert'&&html`<${AlertSheet} st=${st} onClose=${()=>setModal(null)} onSubmit=${act.raiseAlert}/>`}
         ${modal?.type==='guide'&&html`<${GuideSheet} id=${modal.id} onClose=${()=>setModal(null)} onAlert=${()=>setModal({type:'alert'})}/>`}
         ${toast&&html`<div className="toast" role="status"><${Icon} n="check" s=${16} w=${3}/>${toast}</div>`}
         <div className="homebar"></div>
       </div>
     </div>
-    <div className="caption"><b>Sahaay Care System</b> · interactive prototype by Team Sahaay<br/>Tap ☰ to switch between Parent, Contributor, Volunteer, Staff and Night Care. Changes in one role show up in the others.</div>
+    <div className="caption"><b>Sahaay Care System</b> · interactive prototype by Team Sahaay<br/>Tap ☰ to switch between Parent, Contributor, Volunteer, Staff and Night Care. Changes in one role show up in the others.<br/><a href="#query" style=${{color:'#dfe9e3',fontWeight:800}}>Open the website query form</a> · Staff demo PIN: 1234</div>
   </div>`;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+function Root(){
+  const [h,setH]=useState(location.hash);
+  useEffect(()=>{const f=()=>{setH(location.hash);window.scrollTo(0,0)};window.addEventListener('hashchange',f);return()=>window.removeEventListener('hashchange',f)},[]);
+  return h==='#query'?html`<${WebQuery}/>`:html`<${App}/>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${Root}/>`);
 </script>
 
 </body>
